@@ -2,23 +2,13 @@ import XCTest
 @testable import Vaux
 
 final class VauxTests: XCTestCase {
-    func simplePage() -> HTML {
-        html {
-            head {
-                title("A simple page!")
-            }
-            body {
-                div {
-                    "This is the page's body"
-                }
-            }
-        }
-    }
+
+    var myName = "David Okun"
     
     func pageWithManyElements() -> HTML {
         html {
             head {
-                title("A page with a bunch of elements")
+                title(myName)
             }
             body {
                 forEach(0..<10) { i in
@@ -39,14 +29,73 @@ final class VauxTests: XCTestCase {
     }
     
     func testExample() {
+        func simplePage() -> HTML {
+            html {
+                head {
+                    title("A simple page!")
+                }
+                body {
+                    div {
+                        "This is the page's body"
+                    }
+                }
+            }
+        }
+        var correctHTML = """
+                        <html>
+                          <head>
+                            <title>
+                              A simple page!
+                            </title>
+                          </head>
+                          <body>
+                            <div>
+                              This is the page's body
+                            </div>
+                          </body>
+                        </html>
+"""
+        
         let vaux = Vaux()
-        vaux.output = .stdout
-        vaux.render(simplePage())
-        XCTAssertEqual(1, 1)
+        vaux.outputLocation = .file(name: "testing")
+        try? vaux.render(simplePage())
+        guard let rendered = try? VauxFileHelper.getString(from: "testing") else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(rendered.replacingOccurrences(of: "\n", with: ""), correctHTML.replacingOccurrences(of: "\n", with: ""))
+    }
+    
+    func testLink() {
+        var url = "https://google.com"
+        func pageWithLink() -> HTML {
+            html {
+                body {
+                    link(url: url, label: "google")
+                }
+            }
+        }
+        let correctHTML = """
+                        <html>
+                          <body>
+                            <a href="\(url)">
+                              google
+                            </a>
+                          </body>
+                        </html>
+                        """
+        let vaux = Vaux()
+        vaux.outputLocation = .file(name: "testing")
+        try? vaux.render(pageWithLink())
+        guard let rendered = try? VauxFileHelper.getString(from: "testing") else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(rendered.replacingOccurrences(of: "\n", with: ""), correctHTML.replacingOccurrences(of: "\n", with: ""))
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testExample", testExample), ("testLink", testLink)
     ]
 }
 

@@ -81,6 +81,10 @@ public func br() -> HTML {
     return HTMLNode(tag: "br", child: nil)
 }
 
+public func link(url: String, label: String) -> HTML {
+    return HTMLNode(tag: "a", child: label).attr("href", url)
+}
+
 /// Iterates over a collection of data and applies a transformation to each
 /// piece of data that creates an HTML node.
 public func forEach<Coll: Collection>(

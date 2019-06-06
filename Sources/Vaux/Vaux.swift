@@ -49,17 +49,32 @@ public class HTMLOutputStream {
     }
 }
 
+enum VauxError: Error {
+}
+
 public class Vaux {
     public enum VauxOutput {
         case stdout
         case file(name: String)
+        
     }
     
-    public var output: VauxOutput = .stdout
+    public var outputLocation: VauxOutput = .stdout
     
-    public func render(_ content: HTML) {
-        let stream = HTMLOutputStream(FileHandle.standardOutput) // TODO: satisfy enum condition
-        content.renderAsHTML(into: stream, attributes: [])
+    public func render(_ content: HTML) throws {
+        var stream: HTMLOutputStream?
+        switch outputLocation {
+        case .stdout:
+            stream = HTMLOutputStream(FileHandle.standardOutput)
+            break
+        case .file(let filename):
+            do {
+                stream = HTMLOutputStream(try FileHandle(forWritingTo: VauxFileHelper.createFile(named: filename)))
+            } catch let error {
+                throw error
+            }
+        }
+        content.renderAsHTML(into: stream!, attributes: [])
     }
 }
 
