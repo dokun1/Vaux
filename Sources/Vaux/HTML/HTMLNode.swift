@@ -13,11 +13,7 @@ struct HTMLNode: HTML {
     var tag: String
     var child: HTML?
     
-    func renderAsHTML(
-        into stream: HTMLOutputStream,
-        attributes: [Attribute]
-        ) {
-        
+    func renderAsHTML(into stream: HTMLOutputStream, attributes: [Attribute]) {
         // Write the opening of the tag, e.g. `<div`
         stream.writeIndent()
         stream.write("<")
@@ -82,10 +78,7 @@ struct AttributedNode: HTML {
 /// HTML nodes
 struct MultiNode: HTML {
     let children: [HTML]
-    func renderAsHTML(
-        into stream: HTMLOutputStream,
-        attributes: [Attribute]
-        ) {
+    func renderAsHTML(into stream: HTMLOutputStream, attributes: [Attribute]) {
         for child in children {
             child.renderAsHTML(into: stream, attributes: attributes)
         }

@@ -43,4 +43,8 @@ extension HTML {
     public func `class`(_ value: String) -> HTML {
         return attr("class", value)
     }
+    
+    public func `id`(_ value: String) -> HTML {
+        return attr("id", value)
+    }
 }

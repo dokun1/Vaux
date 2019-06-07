@@ -13,15 +13,19 @@ enum VauxFileHelperError: Error {
 }
 
 public class VauxFileHelper {
-    public class func createFile(named: String, path: String = "/tmp/") -> URL {
+    public class func createFile(named: String, path: String) -> URL? {
         let manager = FileManager()
         manager.createFile(atPath: "\(path)\(named).html", contents: nil, attributes: nil)
         return URL(fileURLWithPath: "\(path)\(named).html")
     }
     
-    public class func deleteFile(named: String, path: String = "/tmp/") {
+    public class func deleteFile(named: String, path: String = "/tmp/") throws {
         let manager = FileManager()
-        try? manager.removeItem(atPath: path + named + ".html")
+        do {
+            try manager.removeItem(atPath: path + named + ".html")
+        } catch let error {
+            throw error
+        }
     }
     
     public class func getString(from filename: String, path: String = "/tmp/") throws -> String {

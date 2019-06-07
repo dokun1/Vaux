@@ -2,68 +2,44 @@ import XCTest
 @testable import Vaux
 
 final class VauxTests: XCTestCase {
-
-    var myName = "David Okun"
-    
-    func pageWithManyElements() -> HTML {
-        html {
-            head {
-                title(myName)
-            }
-            body {
-                forEach(0..<10) { i in
-                    div {
-                        "This is element number \(i)"
-                        
-                        br()
-                        
-                        if i.isMultiple(of: 2) {
-                            "It's even!"
-                        } else {
-                            "It's odd!"
-                        }
-                        }.class("custom-class")
-                }
-            }
-        }
-    }
-    
-    func testExample() {
+    func testSimplePage() {
+        var pageTitle = "Page title"
+        var pageBody = "Page body"
         func simplePage() -> HTML {
             html {
                 head {
-                    title("A simple page!")
+                    title(pageTitle)
                 }
                 body {
                     div {
-                        "This is the page's body"
+                        pageBody
                     }
                 }
             }
         }
-        var correctHTML = """
+        let correctHTML = """
                         <html>
                           <head>
                             <title>
-                              A simple page!
+                              Page title
                             </title>
                           </head>
                           <body>
                             <div>
-                              This is the page's body
+                              Page body
                             </div>
                           </body>
                         </html>
-"""
+                        """.replacingOccurrences(of: "\n", with: "")
         
         let vaux = Vaux()
-        vaux.outputLocation = .file(name: "testing")
-        try? vaux.render(simplePage())
-        guard let rendered = try? VauxFileHelper.getString(from: "testing") else {
-            XCTFail()
-            return
+        vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+        do {
+            let rendered = try renderForTesting(with: vaux, html: simplePage())
+            XCTAssertEqual(rendered, correctHTML)
+        } catch let error {
+            XCTFail(error.localizedDescription)
         }
-        XCTAssertEqual(rendered.replacingOccurrences(of: "\n", with: ""), correctHTML.replacingOccurrences(of: "\n", with: ""))
     }
     
     func testLink() {
@@ -83,19 +59,191 @@ final class VauxTests: XCTestCase {
                             </a>
                           </body>
                         </html>
-                        """
+                        """.replacingOccurrences(of: "\n", with: "")
         let vaux = Vaux()
-        vaux.outputLocation = .file(name: "testing")
-        try? vaux.render(pageWithLink())
-        guard let rendered = try? VauxFileHelper.getString(from: "testing") else {
-            XCTFail()
-            return
+        vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+        do {
+            let rendered = try renderForTesting(with: vaux, html: pageWithLink())
+            XCTAssertEqual(rendered, correctHTML)
+        } catch let error {
+            XCTFail(error.localizedDescription)
         }
-        XCTAssertEqual(rendered.replacingOccurrences(of: "\n", with: ""), correctHTML.replacingOccurrences(of: "\n", with: ""))
     }
+    
+    func testLists() {
+        func pageWithLists() -> HTML {
+            html {
+                body {
+                    list {
+                        forEach(1...3) { counter in
+                            listItem(label: "item #\(counter)")
+                        }
+                    }
+                    orderedList {
+                        forEach(1...3) { counter in
+                            listItem(label: "item")
+                        }
+                    }
+                }
+            }
+        }
+        let correctHTML = """
+                            <html>
+                              <body>
+                                <ul>
+                                  <li>
+                                    item #1
+                                  </li>
+                                  <li>
+                                    item #2
+                                  </li>
+                                  <li>
+                                    item #3
+                                  </li>
+                                </ul>
+                                <ol>
+                                  <li>
+                                    item
+                                  </li>
+                                  <li>
+                                    item
+                                  </li>
+                                  <li>
+                                    item
+                                  </li>
+                                </ol>
+                              </body>
+                            </html>
+                        """.replacingOccurrences(of: "\n", with: "")
+        let vaux = Vaux()
+        vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+        do {
+            let rendered = try renderForTesting(with: vaux, html: pageWithLists())
+            XCTAssertEqual(rendered, correctHTML)
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
+    }
+    
+    func testDiv() {
+        func pageWithDivs() -> HTML {
+            html {
+                body {
+                    div {
+                        "Page body"
+                    }.class("vaux-class").id("abcdef")
+                }
+            }
+        }
+        let correctHTML = """
+            <html>
+              <body>
+                <div id="abcdef" class="vaux-class">
+                  Page body
+                </div>
+              </body>
+            </html>
+            """.replacingOccurrences(of: "\n", with: "")
+        let vaux = Vaux()
+        vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+        do {
+            let rendered = try renderForTesting(with: vaux, html: pageWithDivs())
+            XCTAssertEqual(rendered, correctHTML)
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
+    }
+    
+    func testCustomTag() {
+        func pageWithCustomTag() -> HTML {
+            html {
+                body {
+                    custom(tag: "any-tag") {
+                        "This is text inside a custom tag"
+                    }.id("david")
+                }
+            }
+        }
+        let correctHTML = """
+            <html>
+              <body>
+                <any-tag id="david">
+                  This is text inside a custom tag
+                </any-tag>
+              </body>
+            </html>
+            """.replacingOccurrences(of: "\n", with: "")
+        let vaux = Vaux()
+        vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+        do {
+            let rendered = try renderForTesting(with: vaux, html: pageWithCustomTag())
+            XCTAssertEqual(rendered, correctHTML)
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
+    }
+    
+    func testHeading() {
+        func pageWithHeading() -> HTML {
+            html {
+                body {
+                    heading(weight: 1) {
+                        "This is a heading of weight 1"
+                    }
+                    heading(weight: 3) {
+                        "This is a heading of weight 3"
+                    }
+                    paragraph {
+                        emphasis {
+                            "Four score and seven years ago..."
+                        }
+                    }
+                }.attr("style", "background-color:blue")
+            }
+        }
+        let correctHTML = """
+            <html>
+              <body style="background-color:blue">
+                <h1>
+                  This is a heading of weight 1
+                </h1>
+                <h3>
+                  This is a heading of weight 3
+                </h3>
+                <p>
+                  <em>
+                    Four score and seven years ago...
+                  </em>
+                </p>
+              </body>
+            </html>
+            """.replacingOccurrences(of: "\n", with: "")
+        let vaux = Vaux()
+        vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+        do {
+            let rendered = try renderForTesting(with: vaux, html: pageWithHeading())
+            XCTAssertEqual(rendered, correctHTML)
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
+    }
+    
+    private func renderForTesting(with vaux: Vaux, html: HTML) throws -> String {
+        do {
+            try vaux.render(html)
+            let rendered = try VauxFileHelper.getString(from: "testing").replacingOccurrences(of: "\n", with: "")
+            return rendered
+        } catch let error {
+            throw error
+        }
+    }
+    
 
     static var allTests = [
-        ("testExample", testExample), ("testLink", testLink)
+        ("testSimplePage", testSimplePage),
+        ("testLink", testLink),
+        ("testDiv", testDiv),
+        ("testCustomTag", testCustomTag),
+        ("testLists", testLists)
     ]
 }
-
