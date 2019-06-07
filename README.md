@@ -2,7 +2,7 @@
 
 Vaux is a domain-specific language written in Swift for HTML. Its purpose is to allow developers to write HTML, but in Swift.
 
-**Warning**: If you are reading this, this is alpha software based Swift 5.1, which is currently only downloadable from [swift.org](https://swift.org) or in Xcode 11 Beta. This is a work in progress in every sense of the phrase.
+**Warning**: If you are reading this, this is alpha software based on Swift 5.1, which is currently only downloadable from [swift.org](https://swift.org) or in Xcode 11 Beta. This is a work in progress in every sense of the phrase.
 
 ## Example
 
