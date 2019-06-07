@@ -1,48 +1,56 @@
+//
+//  Vaux.swift
+//
+//
+//  Created by David Okun on 6/6/19.
+//
+
 import Foundation
 
-enum VauxError: Error {
-}
-
+// MARK: - Vaux Interface class
+/// An instance of Vaux will render a document for you and put the content where you want it to go.
+/// - Parameters:
+///   - outputLocation: Chooses whether to render the document to stdout, which is effective for quick testing or to a file with a specified name and path, which will always end in `.html`
 public class Vaux {
-    public enum VauxOutput {
-        case stdout
-        case file(name: String, path: String)
-    }
-    
-    public init() { }
-    
-    public var outputLocation: VauxOutput = .stdout
-    
-    private func getStream() throws -> HTMLOutputStream {
-        switch outputLocation {
-        case .stdout:
-            return HTMLOutputStream(FileHandle.standardOutput)
-        case .file(let filename, let path):
-            do {
-                guard let url = VauxFileHelper.createFile(named: filename, path: path) else {
-                    throw VauxFileHelperError.noFile
-                }
-                let handler = try FileHandle(forWritingTo: url)
-                return HTMLOutputStream(handler)
-            } catch let error {
-                throw error
-            }
+  public enum VauxOutput {
+    case stdout
+    case file(name: String, path: String)
+  }
+  
+  /// Initializer must be public to create instance
+  public init() { }
+  
+  /// Default parameter for where render output goes
+  public var outputLocation: VauxOutput = .stdout
+  
+  /// Handles retrieving correct `HTMLOutputStream` for where rendered document will go
+  private func getStream(for content: HTML) throws -> HTMLOutputStream {
+    switch outputLocation {
+    case .stdout:
+      return HTMLOutputStream(FileHandle.standardOutput, content.getTag())
+    case .file(let filename, let path):
+      do {
+        guard let url = VauxFileHelper.createFile(named: filename, path: path) else {
+          throw VauxFileHelperError.noFile
         }
+        let handler = try FileHandle(forWritingTo: url)
+        return HTMLOutputStream(handler, content.getTag())
+      } catch let error {
+        throw error
+      }
     }
-    
-    public func render(_ content: HTML) throws {
-        do {
-            let stream = try getStream()
-            content.renderAsHTML(into: stream, attributes: [])
-        } catch let error {
-            throw error
-        }
+  }
+  
+  /// Renders `HTML` into a static HTML file.
+  /// - Parameters:
+  ///   - content: A function that builds `HTML` that you intend to render.
+  public func render(_ content: HTML) throws {
+    do {
+      let stream = try getStream(for: content)
+      content.renderAsHTML(into: stream, attributes: [])
+    } catch let error {
+      throw error
     }
-}
-
-extension FileHandle: TextOutputStream {
-    public func write(_ string: String) {
-        write(Data(string.utf8))
-    }
+  }
 }
 
