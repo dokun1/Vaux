@@ -50,6 +50,14 @@ vaux.outputLocation = .file(name: "testing", path: "/tmp/")
 do {
   try vaux.render(html)
 } catch let error {
-  print("uh-oh, something happened: \(error.localizedDescription)")
+  print("Uh-oh, something happened: \(error.localizedDescription)")
 }
 ```
+
+The end result is that you have a file called `testing.html` in your `/tmp/` directory.
+
+## How to use
+
+Vaux is available as a Swift package on GitHub. If you are using the Xcode 11 beta, you can simply add this url (https://github.com/dokun1/Vaux) as a dependency. Otherwise, you must include this as a dependency in your `Package.swift` file and use the command line to to create a project for this.
+
+More to come...
