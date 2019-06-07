@@ -9,6 +9,8 @@ public class Vaux {
         case file(name: String, path: String)
     }
     
+    public init() { }
+    
     public var outputLocation: VauxOutput = .stdout
     
     private func getStream() throws -> HTMLOutputStream {
