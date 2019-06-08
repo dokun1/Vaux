@@ -323,9 +323,9 @@ Note that this is also an example of the `forEach` functionality, qwhich allows 
 func buildPage() -> HTML {
   html {
     list {
-      listItem(label: "item #1)
-      listItem(label: "item #2)
-      listItem(label: "item #3)
+      listItem(label: "item #1")
+      listItem(label: "item #2")
+      listItem(label: "item #3")
     }
   }
 }
@@ -355,9 +355,9 @@ In HTML, an ordered list rendered the same as an unordered list, but the prefix 
 func buildPage() -> HTML {
   html {
     orderedList {
-      listItem(label: "item #1)
-      listItem(label: "item #2)
-      listItem(label: "item #3)
+      listItem(label: "item #1")
+      listItem(label: "item #2")
+      listItem(label: "item #3")
     }
   }
 }
