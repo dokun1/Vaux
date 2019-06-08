@@ -123,7 +123,7 @@ This will render like so:
 <!DOCTYPE html>
 <html>
   <body>
-	  hello
+    hello
   </body>
 </html>
 ```
@@ -148,7 +148,7 @@ This will render like so:
 <!DOCTYPE html>
 <html>
   <head>
-	  hello
+    hello
   </head>
 </html>
 ```
@@ -173,7 +173,7 @@ This will render like so:
 <!DOCTYPE html>
 <html>
   <div>
-	  hello
+    hello
   </div>
 </html>
 ```
@@ -196,7 +196,7 @@ This will render like so:
 <!DOCTYPE html>
 <html>
   <title>
-	  Page title
+    Page title
   </title>
 </html>
 ```
@@ -218,7 +218,7 @@ This will render like so:
 ```html
 <!DOCTYPE html>
 <html>
-	<br/>
+  <br/>
 </html>
 ```
 
@@ -307,12 +307,12 @@ In HTML, an unordered list is a rendered list of list items that show as bullet 
 
 ```swift 
 func buildPage() -> HTML {
-	html {
-	  list {
-    	 forEach(1...3) { counter in
-    	   listItem(label: "item #\(counter)")
-	   }
-	 }
+  html {
+    list {
+      forEach(1...3) { counter in
+        listItem(label: "item #\(counter)")
+      }
+    }
   }
 }
 ```
