@@ -546,7 +546,7 @@ This will render like so:
 ```html
 <!DOCTYPE html>
 <html>
-  <div keey="value">
+  <div key="value">
     Custom tag text goes here
   </div>
 </html>
