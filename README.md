@@ -419,9 +419,65 @@ This HTML will render like so:
 ```html
 <!DOCTYPE html>
 <html>
-  <link rel="stylesheet" href="/tmp/style.css">
+  <link rel="stylesheet" href="/tmp/style.css"/>
 </html>
 ```
+
+### <script/>
+
+You can extend HTML with scripting languages, like `javascript`. It is a common practice, and it allows a lot of possibilities.
+In your Swift function, write this:
+
+```swift
+func buildPage() -> HTML {
+  html {
+    script(code: "var i = 0;")
+  }
+}
+```
+or using multiline strings:
+
+```swift
+func buildPage() -> HTML {
+  html {
+    script(code: """
+      var i = 0;
+      """)
+  }
+}
+```
+**Note that currently, using the multiline strings, you cannot use double quotes or they will be escaped!**
+
+This HTML will render like so:
+
+```html
+<!DOCTYPE html>
+<html>
+  <script>
+    var i = 0;
+  </script>
+</html>
+```
+
+A script can also be included by its URL. In your Swift function, write this:
+
+```swift
+func buildPage() -> HTML {
+  html {
+    linkScript(src: "script.js")
+  }
+}
+```
+This HTML will render like so:
+
+```html
+<!DOCTYPE html>
+<html>
+  <script url="script.js">
+  </script>
+</html>
+```
+
 
 ### Custom HTML Tags
 
@@ -430,7 +486,7 @@ This library aims to cover all possible HTML tags. As this library grows, it is 
 ```swift
 func buildPage() -> HTML {
   html {
-    custom(tag: "any-tag")
+    custom(tag: "any-tag") {
       "Custom tag text goes here"
     }
   }
