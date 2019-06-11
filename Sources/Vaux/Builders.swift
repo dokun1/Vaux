@@ -7,6 +7,16 @@
 
 import Foundation
 
+/// Heading weight for the heading tag.
+public enum HeadingWeight {
+    case h1
+    case h2
+    case h3
+    case h4
+    case h5
+    case h6
+}
+
 /// Inserts the top level `<html>` element into the HTML document, and closes with `</html>` after the contents of the closure.
 /// - Parameters:
 ///   - child: `HTML` content to go inside the `<html></html>` element.
@@ -49,13 +59,10 @@ public func lineBreak() -> HTML {
 
 /// Inserts a `<h1>` element (given the specified weight) into the
 /// - Parameters:
-///   - weight: The weight of the heading, such as `<h1>` or `<h4>`. The weight must be specified as between 1 and 6.
+///   - weight: The weight of the heading, such as `<h1>` or `<h4>`.
 ///   - child: `HTML` content to go inside the `<h1></h1>` element.
-public func heading(weight: Int, @HTMLBuilder child: () -> HTML) -> HTML {
-  var weight = weight
-  if weight < 1 { weight = 1 }
-  if weight > 6 { weight = 6 }
-  return HTMLNode(tag: "h\(weight)", child: child())
+public func heading(_ weight: HeadingWeight, @HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "\(weight)", child: child())
 }
 
 /// Inserts a `<p>` element into the HTML document, and closes with `</p>` after the contents of the closure.
