@@ -311,8 +311,7 @@ final class VauxTests: XCTestCase {
     ("testCustomTag", testCustomTag),
     ("testLists", testLists),
     ("testHeading", testHeading),
-    ("testNestedPages", testNestedPages),
-    ("testImage", testImage),
+    ("testNestedPages", testNestedPages)
   ]
 }
 
