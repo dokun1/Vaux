@@ -108,6 +108,13 @@ public func linkStylesheet(url: String) -> HTML {
   return HTMLNode(tag: "link", child: nil).attr("href", url).attr("rel", "stylesheet")
 }
 
+
+/// Inserts a `<img src="url"/>` element into the HTML document.
+/// - Parameter url: The url of the image to show on the webpage.
+public func image(url: String) -> HTML {
+    return HTMLNode(tag: "img", child: nil).attr("src", url)
+}
+
 /// Inserts a custom element into the HTML document with your specified tag, and closes with the closing of that tag after the contents of the closure. For example, if you specify `"any-tag"` for the tag, then the HTML element will look like: `<any-tag></any-tag>`
 /// - Parameters:
 ///   - tag: The tag for the element, which can be any `String`.

@@ -382,6 +382,34 @@ final class VauxTests: XCTestCase {
     }
   }
   
+  func testImage() {
+    var url = "my_image.png"
+    func pageWithLink() -> HTML {
+        html {
+            body {
+                image(url: url)
+            }
+        }
+    }
+    let correctHTML = """
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <img src="my_image.png"/>
+          </body>
+        </html>
+        """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+        let rendered = try renderForTesting(with: vaux, html: pageWithLink())
+        // TODO: Make this pass with better string comparisons
+        XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+        XCTFail(error.localizedDescription)
+    }
+  }
+  
   private func renderForTesting(with vaux: Vaux, html: HTML) throws -> String {
     do {
       try vaux.render(html)
