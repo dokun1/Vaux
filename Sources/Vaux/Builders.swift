@@ -108,6 +108,43 @@ public func linkStylesheet(url: String) -> HTML {
   return HTMLNode(tag: "link", child: nil).attr("href", url).attr("rel", "stylesheet")
 }
 
+public func tableGrid(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "table", child: child())
+}
+
+public func tableHead(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "thead", child: child())
+}
+
+public func tableHeadData(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "th", child: child())
+}
+
+public func tableBody(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "tbody", child: child())
+}
+
+public func tableRow(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "tr", child: child())
+}
+
+public func tableData(@HTMLBuilder child: () -> HTML?) -> HTML {
+  return HTMLNode(tag: "td", child: child())
+}
+
+public func superscript(value: String) -> HTML {
+  return HTMLNode(tag: "sup", child: value)
+}
+
+public func `subscript`(value: String) -> HTML {
+  return HTMLNode(tag: "sub", child: value)
+}
+
+public func caption(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "caption", child: child())
+}
+
+
 /// Inserts a custom element into the HTML document with your specified tag, and closes with the closing of that tag after the contents of the closure. For example, if you specify `"any-tag"` for the tag, then the HTML element will look like: `<any-tag></any-tag>`
 /// - Parameters:
 ///   - tag: The tag for the element, which can be any `String`.
@@ -120,6 +157,20 @@ public func custom(tag: String, @HTMLBuilder child: () -> HTML) -> HTML {
 /// This allows you to iterate over a collection of data that will be rendered into HTML. By inspecting the variable passed into the closure, you can choose to insert it via a HTML node, or do nothing.
 public func forEach<Coll: Collection>(_ data: Coll, @HTMLBuilder content: @escaping (Coll.Element) -> HTML) -> HTML {
   return MultiNode(children: data.map(content))
+}
+
+public enum Scope: String {
+  case row = "row"
+  case column = "column"
+  case rowGroup = "rowgroup"
+  case columnGroup = "colgroup"
+}
+
+public enum Alignment: String {
+  case left = "left"
+  case right = "right"
+  case center = "center"
+  case justified = "justified"
 }
 
 extension HTML {
@@ -137,6 +188,26 @@ extension HTML {
   ///   - value: The value that will be associated with the `id` tag.
   public func `id`(_ value: String) -> HTML {
     return attr("id", value)
+  }
+  
+  public func columnSpan(_ value: Int) -> HTML {
+    return attr("colspan", String(value))
+  }
+  
+  public func rowSpan(_ value: Int) -> HTML {
+    return attr("rowspan", String(value))
+  }
+  
+  public func scope(_ value: Scope) -> HTML {
+    return attr("scope", value.rawValue)
+  }
+  
+  public func alignment(_ value: Alignment) -> HTML {
+    return attr("align", value.rawValue)
+  }
+  
+  public func backgroundColor(_ hexCode: String) -> HTML {
+    return attr("bgcolor", hexCode)
   }
   
   /// Allows you to specify inline CSS (cascading style sheets) style for a HTML element.

@@ -37,12 +37,13 @@ struct HTMLNode: HTML {
     
     /// If the element has no children, close it on the same line.
     guard let child = child else {
-      stream.write("/>\n")
+      stream.write("/>")
+      stream.writeNewline()
       return
     }
     
-    /// If there is a child, add a new line, and render the child element.
-    stream.write(">\n")
+    stream.write(">")
+    stream.writeNewline()
     stream.withIndent {
       child.renderAsHTML(into: stream, attributes: [])
     }
@@ -51,7 +52,8 @@ struct HTMLNode: HTML {
     stream.writeIndent()
     stream.write("</")
     stream.write(tag)
-    stream.write(">\n")
+    stream.write(">")
+    stream.writeNewline()
   }
 }
 
