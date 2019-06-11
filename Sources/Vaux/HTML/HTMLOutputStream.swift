@@ -10,7 +10,7 @@ import Foundation
 // MARK: - HTMLOutputStream
 /// A helper class for rendering formatted HTML to a given `TextOutputStream`.
 public class HTMLOutputStream {
-  var output: TextOutputStream
+  public internal(set) var output: TextOutputStream
   
   /// Create an `HTMLOutputStream` that will render `HTML` nodes as HTML text.
   public init(_ output: TextOutputStream, _ tag: String?) {
