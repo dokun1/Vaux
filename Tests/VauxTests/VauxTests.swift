@@ -56,7 +56,6 @@ final class VauxTests: XCTestCase {
       html {
         body {
           link(url: url, label: "google")
-          lineBreak()
         }
       }
     }
@@ -78,6 +77,72 @@ final class VauxTests: XCTestCase {
       XCTAssertEqual(rendered, correctHTML)
     } catch let error {
       XCTFail(error.localizedDescription)
+    }
+  }
+    
+  func testLinebreak() {
+    var url = "https://google.com"
+    func pageWithLink() -> HTML {
+        html {
+            body {
+                lineBreak()
+            }
+        }
+    }
+    let correctHTML = """
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <br/>
+          </body>
+        </html>
+        """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+        let rendered = try renderForTesting(with: vaux, html: pageWithLink())
+        // TODO: Make this pass with better string comparisons
+        XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+        XCTFail(error.localizedDescription)
+    }
+  }
+    
+  func testEmphasis() {
+    var url = "https://google.com"
+    func pageWithLink() -> HTML {
+        html {
+            body {
+                paragraph {
+                  "Four score and"
+                    emphasis { "seven" }
+                    "years ago..."
+                }
+            }
+        }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <p>
+          Four score and
+          <em>
+            seven
+          </em>
+          years ago...
+        </p>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+        let rendered = try renderForTesting(with: vaux, html: pageWithLink())
+        // TODO: Make this pass with better string comparisons
+        XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+        XCTFail(error.localizedDescription)
     }
   }
   
@@ -223,9 +288,7 @@ final class VauxTests: XCTestCase {
             "This is a heading of weight 3"
           }
           paragraph {
-            "Four score and "
-            emphasis { "seven" }
-            " years ago..."
+            "Four score and seven years ago..."
           }
         }.style([StyleAttribute(key: "background-color", value: "blue"),
                  StyleAttribute(key: "color", value: "red")])
@@ -242,7 +305,7 @@ final class VauxTests: XCTestCase {
                   This is a heading of weight 3
                 </h3>
                 <p>
-                  Four score and <em>seven</em> years ago...
+                  Four score and seven years ago...
                 </p>
               </body>
             </html>
@@ -292,6 +355,32 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
+    
+  func testAttributes() {
+    func buildPage() -> HTML {
+        html {
+            div {
+                "Custom tag text goes here"
+                }.attr("key", "value")
+        }
+    }
+    let correctHTML = """
+        <!DOCTYPE html>
+        <html>
+          <div key="value">
+            Custom tag text goes here
+          </div>
+        </html>
+        """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+        let rendered = try renderForTesting(with: vaux, html: buildPage())
+        XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+        XCTFail(error.localizedDescription)
+    }
+  }
   
   private func renderForTesting(with vaux: Vaux, html: HTML) throws -> String {
     do {
@@ -307,11 +396,14 @@ final class VauxTests: XCTestCase {
   static var allTests = [
     ("testSimplePage", testSimplePage),
     ("testLink", testLink),
+    ("testLinebreak", testLinebreak),
+    ("testEmphasis", testEmphasis),
     ("testDiv", testDiv),
     ("testCustomTag", testCustomTag),
     ("testLists", testLists),
     ("testHeading", testHeading),
-    ("testNestedPages", testNestedPages)
+    ("testNestedPages", testNestedPages),
+    ("testAttributes", testAttributes),
   ]
 }
 
