@@ -293,6 +293,106 @@ final class VauxTests: XCTestCase {
     }
   }
   
+    
+  func testLinkScript() {
+    func masterPage() -> HTML {
+        html {
+            body {
+                linkScript(src: "script.js")
+            }
+        }
+    }
+    let correctHTML = """
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <script src="script.js">
+            </script>
+          </body>
+        </html>
+        """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+        let rendered = try renderForTesting(with: vaux, html: masterPage())
+        XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+        XCTFail(error.localizedDescription)
+    }
+  }
+    
+  func testScript() {
+    var pageTitle = "Page title"
+    var pageBody = "Page body"
+    func pageWithJavascript() -> HTML {
+        html {
+            body {
+                paragraph { "" }.id("script")
+                script(code: "document.getElementById('script').innerHTML = 'Hello JavaScript!';")
+            }
+        }
+    }
+    let correctHTML = """
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <p id="script">
+            </p>
+            <script>
+              document.getElementById('script').innerHTML = 'Hello JavaScript!';
+            </script>
+          </body>
+        </html>
+        """.replacingOccurrences(of: "\n", with: "")
+    
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+        let rendered = try renderForTesting(with: vaux, html: pageWithJavascript())
+        XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+        XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testScriptMultiline() {
+    var pageTitle = "Page title"
+    var pageBody = "Page body"
+    func pageWithJavascript() -> HTML {
+        html {
+            body {
+                paragraph { "" }.id("script")
+                script(code: """
+                    document.getElementById("script").innerHTML = "Hello JavaScript!";
+                    """
+                )
+            }
+        }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <p id="script">
+        </p>
+        <script>
+          document.getElementById("script").innerHTML = "Hello JavaScript!";
+        </script>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+        let rendered = try renderForTesting(with: vaux, html: pageWithJavascript())
+        //TODO: fix the HTML encoding of the multiline to make the test pass.
+        XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+        XCTFail(error.localizedDescription)
+    }
+  }
+  
   private func renderForTesting(with vaux: Vaux, html: HTML) throws -> String {
     do {
       try vaux.render(html)
@@ -311,7 +411,10 @@ final class VauxTests: XCTestCase {
     ("testCustomTag", testCustomTag),
     ("testLists", testLists),
     ("testHeading", testHeading),
-    ("testNestedPages", testNestedPages)
+    ("testNestedPages", testNestedPages),
+    ("testScript", testScript),
+    ("testScriptMultiline", testScriptMultiline),
+    ("testLinkScript", testLinkScript),
   ]
 }
 
