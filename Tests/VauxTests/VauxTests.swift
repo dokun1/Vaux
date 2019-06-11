@@ -295,7 +295,7 @@ final class VauxTests: XCTestCase {
   
   func testImage() {
     var url = "my_image.png"
-    func pageWithLink() -> HTML {
+    func pageWithImage() -> HTML {
         html {
             body {
                 image(url: url)
@@ -313,7 +313,7 @@ final class VauxTests: XCTestCase {
     let vaux = Vaux()
     vaux.outputLocation = .file(name: "testing", path: "/tmp/")
     do {
-        let rendered = try renderForTesting(with: vaux, html: pageWithLink())
+        let rendered = try renderForTesting(with: vaux, html: pageWithImage())
         // TODO: Make this pass with better string comparisons
         XCTAssertEqual(rendered, correctHTML)
     } catch let error {
