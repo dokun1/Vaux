@@ -314,7 +314,6 @@ final class VauxTests: XCTestCase {
     vaux.outputLocation = .file(name: "testing", path: "/tmp/")
     do {
         let rendered = try renderForTesting(with: vaux, html: pageWithImage())
-        // TODO: Make this pass with better string comparisons
         XCTAssertEqual(rendered, correctHTML)
     } catch let error {
         XCTFail(error.localizedDescription)
