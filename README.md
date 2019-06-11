@@ -423,7 +423,7 @@ This HTML will render like so:
 </html>
 ```
 
-### <script/>
+### `<script/>`
 
 You can extend HTML with scripting languages, like `javascript`. It is a common practice, and it allows a lot of possibilities.
 In your Swift function, write this:
