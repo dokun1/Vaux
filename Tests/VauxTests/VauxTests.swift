@@ -296,11 +296,11 @@ final class VauxTests: XCTestCase {
   func testImage() {
     var url = "my_image.png"
     func pageWithImage() -> HTML {
-        html {
-            body {
-                image(url: url)
-            }
+      html {
+        body {
+          image(url: url)
         }
+      }
     }
     let correctHTML = """
         <!DOCTYPE html>
