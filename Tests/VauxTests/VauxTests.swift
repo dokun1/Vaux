@@ -78,6 +78,69 @@ final class VauxTests: XCTestCase {
     }
   }
   
+  func testLinebreak() {
+    func pageWithLinebreak() -> HTML {
+      html {
+        body {
+          lineBreak()
+        }
+      }
+    }
+    let correctHTML = """
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <br/>
+          </body>
+        </html>
+        """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+      let rendered = try renderForTesting(with: vaux, html: pageWithLinebreak())
+      // TODO: Make this pass with better string comparisons
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testEmphasis() {
+    func pageWithLink() -> HTML {
+      html {
+        body {
+          paragraph {
+            "Four score and"
+            emphasis { "seven" }
+            "years ago..."
+          }
+        }
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <p>
+          Four score and
+          <em>
+            seven
+          </em>
+          years ago...
+        </p>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+      let rendered = try renderForTesting(with: vaux, html: pageWithLink())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
   func testStdout() {
     func buildPage() -> HTML {
       html {
@@ -282,6 +345,34 @@ final class VauxTests: XCTestCase {
     vaux.outputLocation = .file(name: "testing", path: "/tmp/")
     do {
       let rendered = try renderForTesting(with: vaux, html: masterPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testAttributes() {
+    func buildPage() -> HTML {
+      html {
+        div {
+          "Custom tag text goes here"
+        }.attr("key", "value")
+        .id("my_custom")
+        .class("custom class")
+      }
+    }
+    let correctHTML = """
+        <!DOCTYPE html>
+        <html>
+          <div class="custom class" id="my_custom" key="value">
+            Custom tag text goes here
+          </div>
+        </html>
+        """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+      let rendered = try renderForTesting(with: vaux, html: buildPage())
       XCTAssertEqual(rendered, correctHTML)
     } catch let error {
       XCTFail(error.localizedDescription)
@@ -534,11 +625,14 @@ final class VauxTests: XCTestCase {
   static var allTests = [
     ("testSimplePage", testSimplePage),
     ("testLink", testLink),
+    ("testLinebreak", testLinebreak),
+    ("testEmphasis", testEmphasis),
     ("testDiv", testDiv),
     ("testCustomTag", testCustomTag),
     ("testLists", testLists),
     ("testHeading", testHeading),
-    ("testNestedPages", testNestedPages)
+    ("testNestedPages", testNestedPages),
+    ("testAttributes", testAttributes),
   ]
 }
 
