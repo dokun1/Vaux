@@ -79,15 +79,14 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-    
+  
   func testLinebreak() {
-    var url = "https://google.com"
-    func pageWithLink() -> HTML {
-        html {
-            body {
-                lineBreak()
-            }
+    func pageWithLinebreak() -> HTML {
+      html {
+        body {
+          lineBreak()
         }
+      }
     }
     let correctHTML = """
         <!DOCTYPE html>
@@ -100,26 +99,25 @@ final class VauxTests: XCTestCase {
     let vaux = Vaux()
     vaux.outputLocation = .file(name: "testing", path: "/tmp/")
     do {
-        let rendered = try renderForTesting(with: vaux, html: pageWithLink())
-        // TODO: Make this pass with better string comparisons
-        XCTAssertEqual(rendered, correctHTML)
+      let rendered = try renderForTesting(with: vaux, html: pageWithLinebreak())
+      // TODO: Make this pass with better string comparisons
+      XCTAssertEqual(rendered, correctHTML)
     } catch let error {
-        XCTFail(error.localizedDescription)
+      XCTFail(error.localizedDescription)
     }
   }
-    
+  
   func testEmphasis() {
-    var url = "https://google.com"
     func pageWithLink() -> HTML {
-        html {
-            body {
-                paragraph {
-                  "Four score and"
-                    emphasis { "seven" }
-                    "years ago..."
-                }
-            }
+      html {
+        body {
+          paragraph {
+            "Four score and"
+            emphasis { "seven" }
+            "years ago..."
+          }
         }
+      }
     }
     let correctHTML = """
     <!DOCTYPE html>
@@ -138,11 +136,10 @@ final class VauxTests: XCTestCase {
     let vaux = Vaux()
     vaux.outputLocation = .file(name: "testing", path: "/tmp/")
     do {
-        let rendered = try renderForTesting(with: vaux, html: pageWithLink())
-        // TODO: Make this pass with better string comparisons
-        XCTAssertEqual(rendered, correctHTML)
+      let rendered = try renderForTesting(with: vaux, html: pageWithLink())
+      XCTAssertEqual(rendered, correctHTML)
     } catch let error {
-        XCTFail(error.localizedDescription)
+      XCTFail(error.localizedDescription)
     }
   }
   
@@ -355,19 +352,21 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-    
+  
   func testAttributes() {
     func buildPage() -> HTML {
-        html {
-            div {
-                "Custom tag text goes here"
-                }.attr("key", "value")
-        }
+      html {
+        div {
+          "Custom tag text goes here"
+        }.attr("key", "value")
+        .id("my_custom")
+        .class("custom class")
+      }
     }
     let correctHTML = """
         <!DOCTYPE html>
         <html>
-          <div key="value">
+          <div class="custom class" id="my_custom" key="value">
             Custom tag text goes here
           </div>
         </html>
@@ -375,10 +374,10 @@ final class VauxTests: XCTestCase {
     let vaux = Vaux()
     vaux.outputLocation = .file(name: "testing", path: "/tmp/")
     do {
-        let rendered = try renderForTesting(with: vaux, html: buildPage())
-        XCTAssertEqual(rendered, correctHTML)
+      let rendered = try renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
     } catch let error {
-        XCTFail(error.localizedDescription)
+      XCTFail(error.localizedDescription)
     }
   }
   
