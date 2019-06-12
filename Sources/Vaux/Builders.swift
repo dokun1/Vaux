@@ -104,8 +104,8 @@ public func orderedList(@HTMLBuilder child: () -> HTML) -> HTML {
 /// - Parameters:
 ///   - url: The hyperlink that the html link will navigate to when clicked in the web page.
 ///   - label: The content that will go inside the `<a href=""></a>` element, usually a string of text.
-public func link(url: String, label: String) -> HTML {
-  return HTMLNode(tag: "a", child: label).attr("href", url)
+public func link(url: String, label: String, inline: Bool = false) -> HTML {
+  return HTMLNode(tag: "a", child: label, inline: inline).attr("href", url)
 }
 
 /// Inserts a `<link rel="stylesheet" href="url">` element into the HTML document.

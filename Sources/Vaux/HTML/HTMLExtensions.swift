@@ -22,6 +22,42 @@ extension String: HTML {
   }
 }
 
+/// Numeric literals should be interpreted as strings when being written to HTML
+extension Int: HTML {
+  public func renderAsHTML(into stream: HTMLOutputStream, attributes: [Attribute]) {
+    let string = String(self)
+    string.renderAsHTML(into: stream, attributes: attributes)
+  }
+  
+  public func getTag() -> String? {
+    return nil
+  }
+}
+
+/// Numeric literals should be interpreted as strings when being written to HTML
+extension Double: HTML {
+  public func renderAsHTML(into stream: HTMLOutputStream, attributes: [Attribute]) {
+    let string = String(self)
+    string.renderAsHTML(into: stream, attributes: attributes)
+  }
+  
+  public func getTag() -> String? {
+    return nil
+  }
+}
+
+/// Numeric literals should be interpreted as strings when being written to HTML
+extension Float: HTML {
+  public func renderAsHTML(into stream: HTMLOutputStream, attributes: [Attribute]) {
+    let string = String(self)
+    string.renderAsHTML(into: stream, attributes: attributes)
+  }
+  
+  public func getTag() -> String? {
+    return nil
+  }
+}
+
 /// Optionals are HTML nodes if their underlying values are HTML nodes. If the
 /// wrapped value is `nil`, it renders to nothing.
 extension Optional: HTML where Wrapped: HTML {

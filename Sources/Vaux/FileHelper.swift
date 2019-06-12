@@ -28,7 +28,8 @@ public class VauxFileHelper {
   /// Returns content from file as `String`, usually effective for testing.
   public class func getRenderedContent(from filename: String, path: String = "/tmp/") throws -> String {
     let manager = FileManager()
-    guard let data = manager.contents(atPath: path + filename + ".html") else {
+    let fullPath = path + filename + ".html"
+    guard let data = manager.contents(atPath: fullPath) else {
       throw VauxFileHelperError.noFile
     }
     guard let string = String(data: data, encoding: .utf8) else {
