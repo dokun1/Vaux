@@ -229,7 +229,7 @@ In HTML, a heading is used to specify the weight of certain text, to create a na
 ```swift
 func buildPage() -> HTML {
   html {
-    heading(weight: 2) {
+    heading(.h2) {
       "This is a header"
     }
   }

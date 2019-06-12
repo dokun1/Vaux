@@ -7,6 +7,16 @@
 
 import Foundation
 
+/// Heading weight for the heading tag.
+public enum HeadingWeight {
+    case h1
+    case h2
+    case h3
+    case h4
+    case h5
+    case h6
+}
+
 /// Inserts the top level `<html>` element into the HTML document, and closes with `</html>` after the contents of the closure.
 /// - Parameters:
 ///   - child: `HTML` content to go inside the `<html></html>` element.
@@ -49,13 +59,10 @@ public func lineBreak() -> HTML {
 
 /// Inserts a `<h1>` element (given the specified weight) into the
 /// - Parameters:
-///   - weight: The weight of the heading, such as `<h1>` or `<h4>`. The weight must be specified as between 1 and 6.
+///   - weight: The weight of the heading, such as `<h1>` or `<h4>`.
 ///   - child: `HTML` content to go inside the `<h1></h1>` element.
-public func heading(weight: Int, @HTMLBuilder child: () -> HTML) -> HTML {
-  var weight = weight
-  if weight < 1 { weight = 1 }
-  if weight > 6 { weight = 6 }
-  return HTMLNode(tag: "h\(weight)", child: child())
+public func heading(_ weight: HeadingWeight, @HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "\(weight)", child: child())
 }
 
 /// Inserts a `<p>` element into the HTML document, and closes with `</p>` after the contents of the closure.
@@ -108,12 +115,48 @@ public func linkStylesheet(url: String) -> HTML {
   return HTMLNode(tag: "link", child: nil).attr("href", url).attr("rel", "stylesheet")
 }
 
-
 /// Inserts a `<img src="url"/>` element into the HTML document.
 /// - Parameter url: The url of the image to show on the webpage.
 public func image(url: String) -> HTML {
   return HTMLNode(tag: "img", child: nil).attr("src", url)
 }
+
+public func tableGrid(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "table", child: child())
+}
+
+public func tableHead(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "thead", child: child())
+}
+
+public func tableHeadData(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "th", child: child())
+}
+
+public func tableBody(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "tbody", child: child())
+}
+
+public func tableRow(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "tr", child: child())
+}
+
+public func tableData(@HTMLBuilder child: () -> HTML?) -> HTML {
+  return HTMLNode(tag: "td", child: child())
+}
+
+public func superscript(value: String) -> HTML {
+  return HTMLNode(tag: "sup", child: value)
+}
+
+public func `subscript`(value: String) -> HTML {
+  return HTMLNode(tag: "sub", child: value)
+}
+
+public func caption(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "caption", child: child())
+}
+
 
 /// Inserts a custom element into the HTML document with your specified tag, and closes with the closing of that tag after the contents of the closure. For example, if you specify `"any-tag"` for the tag, then the HTML element will look like: `<any-tag></any-tag>`
 /// - Parameters:
@@ -127,6 +170,20 @@ public func custom(tag: String, @HTMLBuilder child: () -> HTML) -> HTML {
 /// This allows you to iterate over a collection of data that will be rendered into HTML. By inspecting the variable passed into the closure, you can choose to insert it via a HTML node, or do nothing.
 public func forEach<Coll: Collection>(_ data: Coll, @HTMLBuilder content: @escaping (Coll.Element) -> HTML) -> HTML {
   return MultiNode(children: data.map(content))
+}
+
+public enum Scope: String {
+  case row = "row"
+  case column = "column"
+  case rowGroup = "rowgroup"
+  case columnGroup = "colgroup"
+}
+
+public enum Alignment: String {
+  case left = "left"
+  case right = "right"
+  case center = "center"
+  case justified = "justified"
 }
 
 extension HTML {
@@ -144,6 +201,26 @@ extension HTML {
   ///   - value: The value that will be associated with the `id` tag.
   public func `id`(_ value: String) -> HTML {
     return attr("id", value)
+  }
+  
+  public func columnSpan(_ value: Int) -> HTML {
+    return attr("colspan", String(value))
+  }
+  
+  public func rowSpan(_ value: Int) -> HTML {
+    return attr("rowspan", String(value))
+  }
+  
+  public func scope(_ value: Scope) -> HTML {
+    return attr("scope", value.rawValue)
+  }
+  
+  public func alignment(_ value: Alignment) -> HTML {
+    return attr("align", value.rawValue)
+  }
+  
+  public func backgroundColor(_ hexCode: String) -> HTML {
+    return attr("bgcolor", hexCode)
   }
   
   /// Allows you to specify inline CSS (cascading style sheets) style for a HTML element.
