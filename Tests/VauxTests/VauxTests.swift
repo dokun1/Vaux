@@ -56,7 +56,6 @@ final class VauxTests: XCTestCase {
       html {
         body {
           link(url: url, label: "google")
-          lineBreak()
         }
       }
     }
@@ -214,16 +213,14 @@ final class VauxTests: XCTestCase {
     func pageWithHeading() -> HTML {
       html {
         body {
-          heading(weight: 1) {
+          heading(.h1) {
             "This is a heading of weight 1"
           }
-          heading(weight: 3) {
+          heading(.h3) {
             "This is a heading of weight 3"
           }
           paragraph {
-            "Four score and "
-            emphasis { "seven" }
-            " years ago..."
+            "Four score and seven years ago..."
           }
         }.style([StyleAttribute(key: "background-color", value: "blue"),
                  StyleAttribute(key: "color", value: "red")])
@@ -240,7 +237,7 @@ final class VauxTests: XCTestCase {
                   This is a heading of weight 3
                 </h3>
                 <p>
-                  Four score and <em>seven</em> years ago...
+                  Four score and seven years ago...
                 </p>
               </body>
             </html>
