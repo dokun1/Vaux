@@ -581,6 +581,26 @@ This will render like so:
 </html>
 ```
 
+### `type=mime`
+
+In HTML, you can specify the use of a specific type for some tags, like `link`, `script`, or `input`. In your Swift function, write this:
+
+```swift
+func buildPage() -> HTML {
+  html {
+    linkStylesheet(url: "/tmp/style.css").type("text/css")
+  }
+}
+```
+This HTML will render like so:
+
+```html
+<!DOCTYPE html>
+<html>
+  <link type="text/css" rel="stylesheet" href="/tmp/style.css">
+</html>
+```
+
 ### Custom attributes
 
 This library aims to cover all possible HTML attributes. As this library grows, it is important to have the ability to allow you to create any attribute you need. In your Swift function, write this:
