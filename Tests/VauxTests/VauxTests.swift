@@ -60,13 +60,49 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-                  <!DOCTYPE html>
-                  <html>
-                    <body>
-                      <a href="\(url)">google</a>
-                    </body>
-                  </html>
-                  """.replacingOccurrences(of: "\n", with: "")
+      <!DOCTYPE html>
+      <html>
+      <body>
+      <a href="\(url)">google</a>
+      </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+      let rendered = try renderForTesting(with: vaux, html: pageWithLink())
+      // TODO: Make this pass with better string comparisons
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testLinkWithChild() {
+    var url = "https://google.com"
+    func pageWithLink() -> HTML {
+      html {
+        body {
+          link(url: url) {
+            paragraph {
+              "google"
+            }
+          }
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <a href="\(url)">
+            <p>
+              google
+            </p>
+          </a>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
     vaux.outputLocation = .file(name: "testing", path: "/tmp/")
     do {

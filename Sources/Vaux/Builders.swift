@@ -108,6 +108,15 @@ public func link(url: String, label: String) -> HTML {
   return HTMLNode(tag: "a", child: label).attr("href", url)
 }
 
+/// Inserts a `<a href="url">` element into the HTML document, and closes with `</a>` after the contents of the closure.
+/// - Parameters:
+///   - url: The hyperlink that the html link will navigate to when clicked in the web page.
+///   - child: `HTML` content to go inside the `<a href=""></a>` element.
+/// - Note: If you want to display a text, use the `link:url:label` function instead.
+public func link(url: String, @HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "a", child: child()).attr("href", url)
+}
+
 /// Inserts a `<link rel="stylesheet" href="url">` element into the HTML document.
 /// - Parameters:
 ///   - url: The location in your file system where the CSS file is
