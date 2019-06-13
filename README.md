@@ -6,7 +6,7 @@
     <img src="https://img.shields.io/badge/swift-5.1-orange.svg" alt="Swift Version">
   </a>
   <a href="https://swift.org/package-manager/">
-    <img src="https://img.shields.io/badge/Tools:5.1-FC3324.svg?style=flat" alt="Swift PM Compatible">
+    <img src="https://img.shields.io/badge/SwiftPM-Tools:5.1-FC3324.svg?style=flat" alt="Swift PM Compatible">
   </a>
   <a href="https://choosealicense.com/licenses/apache/">
     <img src="https://img.shields.io/badge/license-Apache-red.svg" alt="Apache License">
