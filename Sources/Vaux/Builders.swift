@@ -98,11 +98,26 @@ public func link(url: String, label: String, inline: Bool = false) -> HTML {
   return HTMLNode(tag: "a", child: label, inline: inline).attr("href", url)
 }
 
+/// Inserts a `<a href="url">` element into the HTML document, and closes with `</a>` after the contents of the closure.
+/// - Parameters:
+///   - url: The hyperlink that the html link will navigate to when clicked in the web page.
+///   - child: `HTML` content to go inside the `<a href=""></a>` element.
+/// - Note: If you want to display a text, use the `link:url:label` function instead.
+public func link(url: String, @HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "a", child: child()).attr("href", url)
+}
+
 /// Inserts a `<link rel="stylesheet" href="url">` element into the HTML document.
 /// - Parameters:
 ///   - url: The location in your file system where the CSS file is
 public func linkStylesheet(url: String) -> HTML {
   return HTMLNode(tag: "link", child: nil).attr("href", url).attr("rel", "stylesheet")
+}
+
+/// Inserts a `<img src="url"/>` element into the HTML document.
+/// - Parameter url: The url of the image to show on the webpage.
+public func image(url: String) -> HTML {
+  return HTMLNode(tag: "img", child: nil).attr("src", url)
 }
 
 public func tableGrid(@HTMLBuilder child: () -> HTML) -> HTML {
@@ -191,6 +206,23 @@ extension HTML {
   
   public func backgroundColor(_ hexCode: String) -> HTML {
     return attr("bgcolor", hexCode)
+  }
+  
+  /// Allow you to specify a media type for a HTML element.
+  ///
+  /// This could  be used for link,  script, input, and any other tags which support it.
+  /// - Note: Look at IANA Media Types for a complete list of standard media types.
+  /// - Example: This:
+  /// ```
+  /// linkStyleSheet(url: "style.css").type("text/css")
+  /// ```
+  /// yields this:
+  /// ```
+  /// <link type="text/css" rel="stylesheet" href="style.css"/>
+  /// ```
+  /// - Parameter mime: The Internet media type of the linked document.
+  public func type(_ mime: String) -> HTML {
+    return attr("type", mime)
   }
   
   /// Allows you to specify inline CSS (cascading style sheets) style for a HTML element.

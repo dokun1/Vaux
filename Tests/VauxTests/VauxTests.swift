@@ -107,6 +107,42 @@ final class VauxTests: XCTestCase {
     }
   }
   
+  func testLinkWithChild() {
+    var url = "https://google.com"
+    func pageWithLink() -> HTML {
+      html {
+        body {
+          link(url: url) {
+            paragraph {
+              "google"
+            }
+          }
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <a href="\(url)">
+            <p>
+              google
+            </p>
+          </a>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithLink())
+      // TODO: Make this pass with better string comparisons
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
   func testLinebreak() {
     func pageWithLinebreak() -> HTML {
       html {
@@ -348,7 +384,7 @@ final class VauxTests: XCTestCase {
   func testNestedPages() {
     func masterPage() -> HTML {
       html {
-        linkStylesheet(url: "/tmp/style.css")
+        linkStylesheet(url: "/tmp/style.css").type("text/css")
         body {
           childPage()
         }
@@ -362,7 +398,7 @@ final class VauxTests: XCTestCase {
     let correctHTML = """
             <!DOCTYPE html>
             <html>
-              <link rel="stylesheet" href="/tmp/style.css"/>
+              <link type="text/css" rel="stylesheet" href="/tmp/style.css"/>
               <body>
                 <div id="abcd">
                   Some div content
@@ -380,22 +416,53 @@ final class VauxTests: XCTestCase {
     }
   }
   
-  func testAttributes() {
-    func buildPage() -> HTML {
+  func testImage() {
+    var url = "my_image.png"
+    func pageWithImage() -> HTML {
       html {
-        div {
-          "Custom tag text goes here"
-        }.attr("key", "value")
-        .id("my_custom")
-        .class("custom class")
+        body {
+          image(url: url)
+        }
       }
     }
     let correctHTML = """
         <!DOCTYPE html>
         <html>
-          <div class="custom class" id="my_custom" key="value">
-            Custom tag text goes here
-          </div>
+          <body>
+            <img src="my_image.png"/>
+          </body>
+        </html>
+        """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+        let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithImage())
+        XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testAttributes() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          div {
+            "Custom tag text goes here"
+            }.attr("key", "value")
+            .id("my_custom")
+            .class("custom class")
+        }
+      }
+    }
+    let correctHTML = """
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <div class="custom class" id="my_custom" key="value">
+              Custom tag text goes here
+            </div>
+          </body>
         </html>
         """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
@@ -433,14 +500,12 @@ final class VauxTests: XCTestCase {
   static var allTests = [
     ("testSimplePage", testSimplePage),
     ("testLink", testLink),
-    ("testLinebreak", testLinebreak),
-    ("testEmphasis", testEmphasis),
     ("testDiv", testDiv),
     ("testCustomTag", testCustomTag),
     ("testLists", testLists),
     ("testHeading", testHeading),
     ("testNestedPages", testNestedPages),
-    ("testAttributes", testAttributes),
+    ("testImage", testImage),
   ]
 }
 

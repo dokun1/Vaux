@@ -403,6 +403,37 @@ This HTML will render like so:
 </html>
 ```
 
+You can also render `HTML` content inside the link tag:
+
+```swift
+func pageWithLink() -> HTML {
+  html {
+    body {
+      link(url: url) {
+        paragraph {
+          "google"
+        }
+      }
+    }
+  }
+}
+```
+This HTML will render like so:
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <a href="\(url)">
+      <p>
+        google
+      </p>
+    </a>
+  </body>
+</html>
+```
+It will be especially usefull, eg. for clickable images.
+
 ### `<link rel="stylesheet">`
 
 In HTML, you can specify the use of a specific CSS (cascading style sheet) specification outside the scope of this HTML document. You just need to know the name and relative location of this file. In your Swift function, write this:
@@ -420,6 +451,29 @@ This HTML will render like so:
 <!DOCTYPE html>
 <html>
   <link rel="stylesheet" href="/tmp/style.css">
+</html>
+```
+
+### `<img src/>`
+
+In HTML, you can render an image into your page. You just need to know the location of this file. In your Swift function, write this:
+
+```swift
+func buildPage() -> HTML {
+html {
+  body {
+    image(url: "image.png")
+  }
+}
+```
+This HTML will render like so:
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <img src="image.png"/>
+  </body>
 </html>
 ```
 
@@ -524,6 +578,26 @@ This will render like so:
   <div style="background-color:blue;color:red">
     Custom tag text goes here
   </div>
+</html>
+```
+
+### `type=mime`
+
+In HTML, you can specify the use of a specific type for some tags, like `link`, `script`, or `input`. In your Swift function, write this:
+
+```swift
+func buildPage() -> HTML {
+  html {
+    linkStylesheet(url: "/tmp/style.css").type("text/css")
+  }
+}
+```
+This HTML will render like so:
+
+```html
+<!DOCTYPE html>
+<html>
+  <link type="text/css" rel="stylesheet" href="/tmp/style.css">
 </html>
 ```
 
