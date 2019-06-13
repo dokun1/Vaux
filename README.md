@@ -1,7 +1,16 @@
-<p align="center">
-<h1>Vaux</h1>
-<a href="https://github.com/apple/swift-package-manager" target="_blank"><img src="https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg"></a><br />
-<img src="https://img.shields.io/badge/platforms-iOS%2013.0%20%7C%20macOS%2010.15%20%7C%20tvOS%2013.0%20%7C%20watchOS%206%20%7C%20Linux-333333.svg" />
+
+# Vaux
+
+<p align="left">
+<a href="https://swift.org">
+    <img src="https://img.shields.io/badge/swift-5.1-orange.svg" alt="Swift Version">
+  </a>
+  <a href="https://swift.org/package-manager/">
+    <img src="https://img.shields.io/badge/Tools:5.1-FC3324.svg?style=flat" alt="Swift PM Compatible">
+  </a>
+  <a href="https://choosealicense.com/licenses/apache/">
+    <img src="https://img.shields.io/badge/license-Apache-red.svg" alt="Apache License">
+  </a>
 </p>
 
 Vaux is a library that allows you to generate HTML using Swift. It includes a domain-specific language written in Swift for HTML, and its purpose is to allow developers to write HTML, but in Swift.
