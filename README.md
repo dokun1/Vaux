@@ -25,7 +25,7 @@ Vaux is a library that allows you to generate HTML using Swift. It includes a do
 
 At WWDC2019, Apple announced functionality for a new feature in Swift called [Function Builders](https://github.com/rjmccall/swift-evolution/blob/function-builders/proposals/XXXX-function-builders.md). The core functionality of Vaux, which includes a Swift DSL for HTML, is heavily inspired by this proposal and corresponding examples. As such, this library exists with two primary goals:
 
-- Provide an underpinning for future potential opinionated frameworks for web interfaces written in Swift.
+- Provide an underpinning for future potential opinionated frameworks for web interfaces written in Swift (for example, [this](https://github.com/dokun1/SwiftWebUI)).
 - Learn more about function builders.
 
 At the time of this library's first open source release, it is standing tall on the shoulders of giants, and gratitude is in order.
