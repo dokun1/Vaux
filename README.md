@@ -423,6 +423,29 @@ This HTML will render like so:
 </html>
 ```
 
+### `<img src/>`
+
+In HTML, you can render an image into your page. You just need to know the location of this file. In your Swift function, write this:
+
+```swift
+func buildPage() -> HTML {
+html {
+  body {
+    image(url: "image.png")
+  }
+}
+```
+This HTML will render like so:
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <img src="image.png"/>
+  </body>
+</html>
+```
+
 ### Custom HTML Tags
 
 This library aims to cover all possible HTML tags. As this library grows, it is important to have a tag that allows you to create any tag you need. Thus, the `custom()` function exists. In your Swift function, write this:

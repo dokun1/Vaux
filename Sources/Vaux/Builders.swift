@@ -115,6 +115,12 @@ public func linkStylesheet(url: String) -> HTML {
   return HTMLNode(tag: "link", child: nil).attr("href", url).attr("rel", "stylesheet")
 }
 
+/// Inserts a `<img src="url"/>` element into the HTML document.
+/// - Parameter url: The url of the image to show on the webpage.
+public func image(url: String) -> HTML {
+  return HTMLNode(tag: "img", child: nil).attr("src", url)
+}
+
 public func tableGrid(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "table", child: child())
 }
