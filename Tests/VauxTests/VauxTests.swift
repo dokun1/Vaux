@@ -319,7 +319,7 @@ final class VauxTests: XCTestCase {
   func testNestedPages() {
     func masterPage() -> HTML {
       html {
-        linkStylesheet(url: "/tmp/style.css")
+        linkStylesheet(url: "/tmp/style.css").type("text/css")
         body {
           childPage()
         }
@@ -333,7 +333,7 @@ final class VauxTests: XCTestCase {
     let correctHTML = """
             <!DOCTYPE html>
             <html>
-              <link rel="stylesheet" href="/tmp/style.css"/>
+              <link type="text/css" rel="stylesheet" href="/tmp/style.css"/>
               <body>
                 <div id="abcd">
                   Some div content

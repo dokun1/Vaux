@@ -223,6 +223,23 @@ extension HTML {
     return attr("bgcolor", hexCode)
   }
   
+  /// Allow you to specify a media type for a HTML element.
+  ///
+  /// This could  be used for link,  script, input, and any other tags which support it.
+  /// - Note: Look at IANA Media Types for a complete list of standard media types.
+  /// - Example: This:
+  /// ```
+  /// linkStyleSheet(url: "style.css").type("text/css")
+  /// ```
+  /// yields this:
+  /// ```
+  /// <link type="text/css" rel="stylesheet" href="style.css"/>
+  /// ```
+  /// - Parameter mime: The Internet media type of the linked document.
+  public func type(_ mime: String) -> HTML {
+    return attr("type", mime)
+  }
+  
   /// Allows you to specify inline CSS (cascading style sheets) style for a HTML element.
   /// - Note: Inline CSS style on HTML elements is often times frowned upon. It is recommended to instead use a link to a separate stylesheet that is defined on its own. You can do this with the `linkStylesheet()` builder.
   /// - Example: This:
