@@ -7,12 +7,19 @@
 
 import Foundation
 
-/// Inserts the top level `<html>` element into the HTML document, and closes with `</html>` after the contents of the closure.
+/// This document should be in alphabetical order.
+// MARK: - Builders
+
+// MARK: - A
+
+/// Inserts a `<article>` element into the HTML document, and closes with `</article>` after the contents of the closure.
 /// - Parameters:
-///   - child: `HTML` content to go inside the `<html></html>` element.
-public func html(@HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: "html", child: child())
+///   - child: `HTML` content to go inside the `<article></article>` element.
+public func article(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "article", child: child())
 }
+
+// MARK: - B
 
 /// Inserts a `<body>` document into the HTML document, and closes with `</body>` after the contents of the closure.
 /// - Parameters:
@@ -21,12 +28,24 @@ public func body(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "body", child: child())
 }
 
-/// Inserts a `<head>` element into the HTML document, and closes with `</head>` after the contents of the closure.
+// MARK: - C
+
+/// Inserts a `<caption>` element into the HTML document, and closes with `</caption>` after the contents of the closure. Each element in the closure must be of type `listItem`.
 /// - Parameters:
-///   - child: `HTML` content to go inside the `<head></head>` element.
-public func head(@HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: "head", child: child())
+///   - child: `HTML` content to go inside the `<caption></caption>` element.
+public func caption(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "caption", child: child())
 }
+
+/// Inserts a custom element into the HTML document with your specified tag, and closes with the closing of that tag after the contents of the closure. For example, if you specify `"any-tag"` for the tag, then the HTML element will look like: `<any-tag></any-tag>`
+/// - Parameters:
+///   - tag: The tag for the element, which can be any `String`.
+///   - child: `HTML` content to go inside the HTML element.
+public func custom(tag: String, @HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: tag, child: child())
+}
+
+// MARK: - D
 
 /// Inserts a `<div>` element into the HTML document, and closes with `</div>` after the contents of the closure.
 /// - Parameters:
@@ -35,16 +54,29 @@ public func div(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "div", child: child())
 }
 
-/// Inserts a `<title ="text">` element into the HTML document.
+// MARK: - E
+
+/// Inserts a `<em>` element into the HTML document, and closes with `</em>` after the contents of the closure.
 /// - Parameters:
-///   - text: The text that will appear inside the `<title></title>` element.
-public func title(_ text: String) -> HTML {
-  return HTMLNode(tag: "title", child: text)
+///   - child: `HTML` content to go inside the `<em></em>` element.
+public func emphasis(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "em", child: child())
 }
 
-/// Inserts a `<br/>` element into the HTML document.
-public func lineBreak() -> HTML {
-  return HTMLNode(tag: "br", child: nil)
+// MARK: - F
+
+/// This allows you to iterate over a collection of data that will be rendered into HTML. By inspecting the variable passed into the closure, you can choose to insert it via a HTML node, or do nothing.
+public func forEach<Coll: Collection>(_ data: Coll, @HTMLBuilder content: @escaping (Coll.Element) -> HTML) -> HTML {
+  return MultiNode(children: data.map(content))
+}
+
+// MARK: - H
+
+/// Inserts a `<head>` element into the HTML document, and closes with `</head>` after the contents of the closure.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<head></head>` element.
+public func head(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "head", child: child())
 }
 
 /// Inserts a `<h1>` element (given the specified weight) into the
@@ -55,39 +87,26 @@ public func heading(_ weight: HeadingWeight, @HTMLBuilder child: () -> HTML) -> 
   return HTMLNode(tag: weight.rawValue, child: child())
 }
 
-/// Inserts a `<p>` element into the HTML document, and closes with `</p>` after the contents of the closure.
+/// Inserts the top level `<html>` element into the HTML document, and closes with `</html>` after the contents of the closure.
 /// - Parameters:
-///   - child: `HTML` content to go inside the `<p></p>` element.
-public func paragraph(@HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: "p", child: child())
+///   - child: `HTML` content to go inside the `<html></html>` element.
+public func html(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "html", child: child())
 }
 
-/// Inserts a `<em>` element into the HTML document, and closes with `</em>` after the contents of the closure.
-/// - Parameters:
-///   - child: `HTML` content to go inside the `<em></em>` element.
-public func emphasis(@HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: "em", child: child())
+// MARK: - I
+
+/// Inserts a `<img src="url"/>` element into the HTML document.
+/// - Parameter url: The url of the image to show on the webpage.
+public func image(url: String) -> HTML {
+  return HTMLNode(tag: "img", child: nil).attr("src", url)
 }
 
-/// Inserts a `<li>` element into the HTML document, and closes with `</li>` after the contents of the closure. These should exist inside of a `list` or `orderedList` closure
-/// - Parameters:
-///   - label: The content that will go inside the `<li></li>` element, usually a string of text.
-public func listItem(label: String) -> HTML {
-  return HTMLNode(tag: "li", child: label)
-}
+// MARK: - L
 
-/// Inserts a `<ul>` element into the HTML document, and closes with `</ul>` after the contents of the closure. Each element in the closure must be of type `listItem`.
-/// - Parameters:
-///   - child: `HTML` content to go inside the `<ul></ul>` element.
-public func list(@HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: "ul", child: child())
-}
-
-/// Inserts a `<ol>` element into the HTML document, and closes with `</ol>` after the contents of the closure. Each element in the closure must be of type `listItem`.
-/// - Parameters:
-///   - child: `HTML` content to go inside the `<ol></ol>` element.
-public func orderedList(@HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: "ol", child: child())
+/// Inserts a `<br/>` element into the HTML document.
+public func lineBreak() -> HTML {
+  return HTMLNode(tag: "br", child: nil)
 }
 
 /// Inserts a `<a href="url">` element into the HTML document, and closes with `</a>` after the contents of the closure.
@@ -114,11 +133,62 @@ public func linkStylesheet(url: String) -> HTML {
   return HTMLNode(tag: "link", child: nil).attr("href", url).attr("rel", "stylesheet")
 }
 
-/// Inserts a `<img src="url"/>` element into the HTML document.
-/// - Parameter url: The url of the image to show on the webpage.
-public func image(url: String) -> HTML {
-  return HTMLNode(tag: "img", child: nil).attr("src", url)
+/// Inserts a `<ul>` element into the HTML document, and closes with `</ul>` after the contents of the closure. Each element in the closure must be of type `listItem`.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<ul></ul>` element.
+public func list(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "ul", child: child())
 }
+
+/// Inserts a `<li>` element into the HTML document, and closes with `</li>` after the contents of the closure. These should exist inside of a `list` or `orderedList` closure
+/// - Parameters:
+///   - label: The content that will go inside the `<li></li>` element, usually a string of text.
+public func listItem(label: String) -> HTML {
+  return HTMLNode(tag: "li", child: label)
+}
+
+// MARK: - O
+
+/// Inserts a `<ol>` element into the HTML document, and closes with `</ol>` after the contents of the closure. Each element in the closure must be of type `listItem`.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<ol></ol>` element.
+public func orderedList(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "ol", child: child())
+}
+
+// MARK: - P
+
+/// Inserts a `<p>` element into the HTML document, and closes with `</p>` after the contents of the closure.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<p></p>` element.
+public func paragraph(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "p", child: child())
+}
+
+// MARK: - S
+
+/// Inserts a `<span>` document into the HTML document, and closes with `</span>` after the contents of the closure.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<span></span>` element.
+public func span(@HTMLBuilder child: () -> HTML) -> HTML {
+  return HTMLNode(tag: "span", child: child())
+}
+
+/// Inserts a `<sup>` element into the HTML document, and closes with `</sup>` after the contents of the closure. Used to make text look higher than other text.
+/// - Parameters:
+///   - value: `String` content to go inside the `<sup></sup>` element.
+public func superscript(value: String) -> HTML {
+  return HTMLNode(tag: "sup", child: value)
+}
+
+/// Inserts a `<sub>` element into the HTML document, and closes with `</sub>` after the contents of the closure.  Used to make text look lower than other text.
+/// - Parameters:
+///   - value: `String` content to go inside the `<sub></sub>` element.
+public func `subscript`(value: String) -> HTML {
+  return HTMLNode(tag: "sub", child: value)
+}
+
+// MARK: - T
 
 /// Inserts a `<table>` element into the HTML document, and closes with `</table>` after the contents of the closure. You may enter whatever you want into further elements, but they must be related to the `<table>` element.
 /// - Parameters:
@@ -162,36 +232,9 @@ public func tableData(@HTMLBuilder child: () -> HTML?) -> HTML {
   return HTMLNode(tag: "td", child: child())
 }
 
-/// Inserts a `<sup>` element into the HTML document, and closes with `</sup>` after the contents of the closure. Used to make text look higher than other text.
+/// Inserts a `<title ="text">` element into the HTML document.
 /// - Parameters:
-///   - value: `String` content to go inside the `<sup></sup>` element.
-public func superscript(value: String) -> HTML {
-  return HTMLNode(tag: "sup", child: value)
-}
-
-/// Inserts a `<sub>` element into the HTML document, and closes with `</sub>` after the contents of the closure.  Used to make text look lower than other text.
-/// - Parameters:
-///   - value: `String` content to go inside the `<sub></sub>` element.
-public func `subscript`(value: String) -> HTML {
-  return HTMLNode(tag: "sub", child: value)
-}
-
-/// Inserts a `<caption>` element into the HTML document, and closes with `</caption>` after the contents of the closure. Each element in the closure must be of type `listItem`.
-/// - Parameters:
-///   - child: `HTML` content to go inside the `<caption></caption>` element.
-public func caption(@HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: "caption", child: child())
-}
-
-/// Inserts a custom element into the HTML document with your specified tag, and closes with the closing of that tag after the contents of the closure. For example, if you specify `"any-tag"` for the tag, then the HTML element will look like: `<any-tag></any-tag>`
-/// - Parameters:
-///   - tag: The tag for the element, which can be any `String`.
-///   - child: `HTML` content to go inside the HTML element.
-public func custom(tag: String, @HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: tag, child: child())
-}
-
-/// This allows you to iterate over a collection of data that will be rendered into HTML. By inspecting the variable passed into the closure, you can choose to insert it via a HTML node, or do nothing.
-public func forEach<Coll: Collection>(_ data: Coll, @HTMLBuilder content: @escaping (Coll.Element) -> HTML) -> HTML {
-  return MultiNode(children: data.map(content))
+///   - text: The text that will appear inside the `<title></title>` element.
+public func title(_ text: String) -> HTML {
+  return HTMLNode(tag: "title", child: text)
 }

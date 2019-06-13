@@ -100,7 +100,6 @@ final class VauxTests: XCTestCase {
     vaux.outputLocation = .file(name: "testing", path: "/tmp/")
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithLink())
-      // TODO: Make this pass with better string comparisons
       XCTAssertEqual(rendered, correctHTML)
     } catch let error {
       XCTFail(error.localizedDescription)
@@ -136,7 +135,6 @@ final class VauxTests: XCTestCase {
     vaux.outputLocation = .file(name: "testing", path: "/tmp/")
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithLink())
-      // TODO: Make this pass with better string comparisons
       XCTAssertEqual(rendered, correctHTML)
     } catch let error {
       XCTFail(error.localizedDescription)
@@ -163,7 +161,74 @@ final class VauxTests: XCTestCase {
     vaux.outputLocation = .file(name: "testing", path: "/tmp/")
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithLinebreak())
-      // TODO: Make this pass with better string comparisons
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testArticle() {
+    func pageWithArticle() -> HTML {
+      html {
+        body {
+          article {
+            "This is an article"
+          }
+        }
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <article>
+          This is an article
+        </article>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithArticle())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSpan() {
+    func pageWithSpan() -> HTML {
+      html {
+        body {
+          paragraph {
+            "When I was "
+            span {
+              "a young boy, "
+            }.style([StyleAttribute(key: "color", value: "blue")])
+            "my father took me into the city."
+          }
+        }
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <p>
+          When I was
+          <span style="color:blue">
+            a young boy,
+          </span>
+          my father took me into the city.
+        </p>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithSpan())
       XCTAssertEqual(rendered, correctHTML)
     } catch let error {
       XCTFail(error.localizedDescription)
@@ -374,7 +439,6 @@ final class VauxTests: XCTestCase {
     vaux.outputLocation = .file(name: "testing", path: "/tmp/")
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithHeading())
-      // TODO: make this test pass with better string comparisons
       XCTAssertEqual(rendered, correctHTML)
     } catch let error {
       XCTFail(error.localizedDescription)
@@ -500,12 +564,20 @@ final class VauxTests: XCTestCase {
   static var allTests = [
     ("testSimplePage", testSimplePage),
     ("testLink", testLink),
+    ("testLinkInline", testLinkInline),
+    ("testLinkWithChild", testLinkWithChild),
+    ("testLinebreak", testLinebreak),
+    ("testArticle", testArticle),
+    ("testEmphasis", testEmphasis),
+    ("testStdout", testStdout),
     ("testDiv", testDiv),
     ("testCustomTag", testCustomTag),
     ("testLists", testLists),
     ("testHeading", testHeading),
     ("testNestedPages", testNestedPages),
     ("testImage", testImage),
+    ("testAttributes", testAttributes),
+    ("testSpan", testSpan)
   ]
 }
 

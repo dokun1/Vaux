@@ -6,6 +6,7 @@
 build/
 DerivedData/
 .swiftpm/
+.swift-version
 ## Various settings
 *.pbxuser
 !default.pbxuser
