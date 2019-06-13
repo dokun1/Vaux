@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 public enum Scope: String {
   case row = "row"
   case column = "column"

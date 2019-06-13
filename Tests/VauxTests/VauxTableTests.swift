@@ -14,7 +14,7 @@ final class VauxTableTests: XCTestCase {
     func simpleTable() -> HTML {
       html {
         body {
-          tableGrid {
+          table {
             tableRow {
               tableData {
                 1
@@ -276,7 +276,7 @@ final class VauxTableTests: XCTestCase {
     func complexTable() -> HTML {
       html {
         body {
-          tableGrid {
+          table {
             caption {
               "Data about the planets of our solar system (Planetary facts taken from "
               link(url: "http://nssdc.gsfc.nasa.gov/planetary/factsheet/", label: "Nasa's Planetary Fact Sheet - Metric").class("external").attr("rel", "noopener")
