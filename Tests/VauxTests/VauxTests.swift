@@ -60,13 +60,13 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-      <!DOCTYPE html>
-      <html>
-      <body>
-      <a href="\(url)">google</a>
-      </body>
-      </html>
-      """.replacingOccurrences(of: "\n", with: "")
+                  <!DOCTYPE html>
+                  <html>
+                    <body>
+                      <a href="\(url)">google</a>
+                    </body>
+                  </html>
+                  """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
     vaux.outputLocation = .file(name: "testing", path: "/tmp/")
     do {
