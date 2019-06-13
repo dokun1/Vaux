@@ -403,7 +403,7 @@ This HTML will render like so:
 </html>
 ```
 
-You can also render some other `HTML` inside the link tag:
+You can also render `HTML` content inside the link tag:
 
 ```swift
 func pageWithLink() -> HTML {
@@ -416,7 +416,7 @@ func pageWithLink() -> HTML {
       }
     }
   }
-  }
+}
 ```
 This HTML will render like so:
 
