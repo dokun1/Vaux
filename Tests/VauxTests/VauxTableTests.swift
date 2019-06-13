@@ -36,33 +36,33 @@ final class VauxTableTests: XCTestCase {
       }
     }
     let correctHTML = """
-            <!DOCTYPE html>
-            <html>
-              <body>
-                <table>
-                  <tr>
-                    <td>
-                      1
-                    </td>
-                    <td>
-                      2
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      3
-                    </td>
-                    <td>
-                      4
-                    </td>
-                  </tr>
-                </table>
-              </body>
-            </html>
-            """.replacingOccurrences(of: "\n", with: "")
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <table>
+          <tr>
+            <td>
+              1
+            </td>
+            <td>
+              2
+            </td>
+          </tr>
+          <tr>
+            <td>
+              3
+            </td>
+            <td>
+              4
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
     
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: simpleTable())
       XCTAssertEqual(rendered, correctHTML)
@@ -303,7 +303,7 @@ final class VauxTableTests: XCTestCase {
     }
     
     let vaux = Vaux()
-    //vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    //vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       try vaux.render(complexTable())
       // TODO: Figure out what is causing this test to fail

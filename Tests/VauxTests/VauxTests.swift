@@ -25,23 +25,23 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-            <!DOCTYPE html>
-            <html>
-              <head>
-                <title>
-                  Page title
-                </title>
-              </head>
-              <body>
-                <div>
-                  Page body
-                </div>
-              </body>
-            </html>
-            """.replacingOccurrences(of: "\n", with: "")
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>
+          Page title
+        </title>
+      </head>
+      <body>
+        <div>
+          Page body
+        </div>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
     
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: simplePage())
       XCTAssertEqual(rendered, correctHTML)
@@ -60,15 +60,15 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-                  <!DOCTYPE html>
-                  <html>
-                    <body>
-                      <a href="\(url)">google</a>
-                    </body>
-                  </html>
-                  """.replacingOccurrences(of: "\n", with: "")
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <a href="\(url)">google</a>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithLink())
       XCTAssertEqual(rendered, correctHTML)
@@ -87,17 +87,17 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-                  <!DOCTYPE html>
-                  <html>
-                    <body>
-                      <a href="\(url)">
-                        google
-                      </a>
-                    </body>
-                  </html>
-                  """.replacingOccurrences(of: "\n", with: "")
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <a href="\(url)">
+          google
+        </a>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithLink())
       XCTAssertEqual(rendered, correctHTML)
@@ -120,19 +120,19 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-      <!DOCTYPE html>
-      <html>
-        <body>
-          <a href="\(url)">
-            <p>
-              google
-            </p>
-          </a>
-        </body>
-      </html>
-      """.replacingOccurrences(of: "\n", with: "")
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <a href="\(url)">
+          <p>
+            google
+          </p>
+        </a>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithLink())
       XCTAssertEqual(rendered, correctHTML)
@@ -150,15 +150,15 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-        <!DOCTYPE html>
-        <html>
-          <body>
-            <br/>
-          </body>
-        </html>
-        """.replacingOccurrences(of: "\n", with: "")
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <br/>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithLinebreak())
       XCTAssertEqual(rendered, correctHTML)
@@ -188,7 +188,7 @@ final class VauxTests: XCTestCase {
     </html>
     """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithArticle())
       XCTAssertEqual(rendered, correctHTML)
@@ -226,7 +226,7 @@ final class VauxTests: XCTestCase {
     </html>
     """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithSpan())
       XCTAssertEqual(rendered, correctHTML)
@@ -262,7 +262,7 @@ final class VauxTests: XCTestCase {
     </html>
     """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithLink())
       XCTAssertEqual(rendered, correctHTML)
@@ -304,36 +304,36 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-            <!DOCTYPE html>
-            <html>
-              <body>
-                <ul>
-                  <li>
-                    item #1
-                  </li>
-                  <li>
-                    item #2
-                  </li>
-                  <li>
-                    item #3
-                  </li>
-                </ul>
-                <ol>
-                  <li>
-                    item
-                  </li>
-                  <li>
-                    item
-                  </li>
-                  <li>
-                    item
-                  </li>
-                </ol>
-              </body>
-            </html>
-            """.replacingOccurrences(of: "\n", with: "")
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <ul>
+          <li>
+            item #1
+          </li>
+          <li>
+            item #2
+          </li>
+          <li>
+            item #3
+          </li>
+        </ul>
+        <ol>
+          <li>
+            item
+          </li>
+          <li>
+            item
+          </li>
+          <li>
+            item
+          </li>
+        </ol>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithLists())
       XCTAssertEqual(rendered, correctHTML)
@@ -353,17 +353,17 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-            <!DOCTYPE html>
-            <html>
-              <body>
-                <div id="abcdef" class="vaux-class">
-                  Page body
-                </div>
-              </body>
-            </html>
-            """.replacingOccurrences(of: "\n", with: "")
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <div id="abcdef" class="vaux-class">
+          Page body
+        </div>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithDivs())
       XCTAssertEqual(rendered, correctHTML)
@@ -383,17 +383,17 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-            <!DOCTYPE html>
-            <html>
-              <body>
-                <any-tag id="12345">
-                  This is text inside a custom tag
-                </any-tag>
-              </body>
-            </html>
-            """.replacingOccurrences(of: "\n", with: "")
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <any-tag id="12345">
+          This is text inside a custom tag
+        </any-tag>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithCustomTag())
       XCTAssertEqual(rendered, correctHTML)
@@ -420,23 +420,23 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-            <!DOCTYPE html>
-            <html>
-              <body style="background-color:blue;color:red">
-                <h1>
-                  This is a heading of weight 1
-                </h1>
-                <h3>
-                  This is a heading of weight 3
-                </h3>
-                <p>
-                  Four score and seven years ago...
-                </p>
-              </body>
-            </html>
-            """.replacingOccurrences(of: "\n", with: "")
+    <!DOCTYPE html>
+    <html>
+      <body style="background-color:blue;color:red">
+        <h1>
+          This is a heading of weight 1
+        </h1>
+        <h3>
+          This is a heading of weight 3
+        </h3>
+        <p>
+          Four score and seven years ago...
+        </p>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithHeading())
       XCTAssertEqual(rendered, correctHTML)
@@ -460,18 +460,18 @@ final class VauxTests: XCTestCase {
       }.id("abcd")
     }
     let correctHTML = """
-            <!DOCTYPE html>
-            <html>
-              <link type="text/css" rel="stylesheet" href="/tmp/style.css"/>
-              <body>
-                <div id="abcd">
-                  Some div content
-                </div>
-              </body>
-            </html>
-            """.replacingOccurrences(of: "\n", with: "")
+    <!DOCTYPE html>
+    <html>
+      <link type="text/css" rel="stylesheet" href="/tmp/style.css"/>
+      <body>
+        <div id="abcd">
+          Some div content
+        </div>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: masterPage())
       XCTAssertEqual(rendered, correctHTML)
@@ -490,15 +490,15 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-        <!DOCTYPE html>
-        <html>
-          <body>
-            <img src="my_image.png"/>
-          </body>
-        </html>
-        """.replacingOccurrences(of: "\n", with: "")
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <img src="my_image.png"/>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
         let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithImage())
         XCTAssertEqual(rendered, correctHTML)
@@ -520,17 +520,17 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-        <!DOCTYPE html>
-        <html>
-          <body>
-            <div class="custom class" id="my_custom" key="value">
-              Custom tag text goes here
-            </div>
-          </body>
-        </html>
-        """.replacingOccurrences(of: "\n", with: "")
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <div class="custom class" id="my_custom" key="value">
+          Custom tag text goes here
+        </div>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
-    vaux.outputLocation = .file(name: "testing", path: "/tmp/")
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
       let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
       XCTAssertEqual(rendered, correctHTML)
@@ -542,7 +542,7 @@ final class VauxTests: XCTestCase {
   public static func renderForTesting(with vaux: Vaux, html: HTML) throws -> String {
     do {
       try vaux.render(html)
-      let rendered = try VauxFileHelper.getRenderedContent(from: "testing").replacingOccurrences(of: "\n", with: "")
+      let rendered = try VauxFileHelper.getRenderedContent(from: Filepath(name: "testing", path: "/tmp/")).replacingOccurrences(of: "\n", with: "")
       return rendered
     } catch let error {
       throw error
@@ -554,12 +554,11 @@ final class VauxTests: XCTestCase {
       let thisPathArray = #file.split(separator: "/").map{String($0)}.dropLast()
       var newPath = "/"
       for component in thisPathArray { newPath.append(component + "/") }
-      return try VauxFileHelper.getRenderedContent(from: named, path: newPath)
+      return try VauxFileHelper.getRenderedContent(from: Filepath(name: named, path: newPath))
     } catch let error {
       throw error
     }
   }
-  
   
   static var allTests = [
     ("testSimplePage", testSimplePage),

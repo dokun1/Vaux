@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+/// Determines the scope of a table heading cell
 public enum Scope: String {
   case row = "row"
   case column = "column"
@@ -15,6 +15,7 @@ public enum Scope: String {
   case columnGroup = "colgroup"
 }
 
+/// Alignment of the content in a cell
 public enum Alignment: String {
   case left = "left"
   case right = "right"
