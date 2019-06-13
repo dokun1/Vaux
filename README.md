@@ -403,6 +403,37 @@ This HTML will render like so:
 </html>
 ```
 
+You can also render `HTML` content inside the link tag:
+
+```swift
+func pageWithLink() -> HTML {
+  html {
+    body {
+      link(url: url) {
+        paragraph {
+          "google"
+        }
+      }
+    }
+  }
+}
+```
+This HTML will render like so:
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <a href="\(url)">
+      <p>
+        google
+      </p>
+    </a>
+  </body>
+</html>
+```
+It will be especially usefull, eg. for clickable images.
+
 ### `<link rel="stylesheet">`
 
 In HTML, you can specify the use of a specific CSS (cascading style sheet) specification outside the scope of this HTML document. You just need to know the name and relative location of this file. In your Swift function, write this:
