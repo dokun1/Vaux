@@ -1,6 +1,5 @@
-# Vaux
-
 <p align="center">
+<h1>Vaux</h1>
 <a href="https://github.com/apple/swift-package-manager" target="_blank"><img src="https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg"></a><br />
 <img src="https://img.shields.io/badge/platforms-iOS%2013.0%20%7C%20macOS%2010.15%20%7C%20tvOS%2013.0%20%7C%20watchOS%206%20%7C%20Linux-333333.svg" />
 </p>
