@@ -7,16 +7,6 @@
 
 import Foundation
 
-/// Heading weight for the heading tag.
-public enum HeadingWeight {
-    case h1
-    case h2
-    case h3
-    case h4
-    case h5
-    case h6
-}
-
 /// Inserts the top level `<html>` element into the HTML document, and closes with `</html>` after the contents of the closure.
 /// - Parameters:
 ///   - child: `HTML` content to go inside the `<html></html>` element.
@@ -62,7 +52,7 @@ public func lineBreak() -> HTML {
 ///   - weight: The weight of the heading, such as `<h1>` or `<h4>`.
 ///   - child: `HTML` content to go inside the `<h1></h1>` element.
 public func heading(_ weight: HeadingWeight, @HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: "\(weight)", child: child())
+  return HTMLNode(tag: weight.rawValue, child: child())
 }
 
 /// Inserts a `<p>` element into the HTML document, and closes with `</p>` after the contents of the closure.
@@ -104,8 +94,8 @@ public func orderedList(@HTMLBuilder child: () -> HTML) -> HTML {
 /// - Parameters:
 ///   - url: The hyperlink that the html link will navigate to when clicked in the web page.
 ///   - label: The content that will go inside the `<a href=""></a>` element, usually a string of text.
-public func link(url: String, label: String) -> HTML {
-  return HTMLNode(tag: "a", child: label).attr("href", url)
+public func link(url: String, label: String, inline: Bool = false) -> HTML {
+  return HTMLNode(tag: "a", child: label, inline: inline).attr("href", url)
 }
 
 /// Inserts a `<a href="url">` element into the HTML document, and closes with `</a>` after the contents of the closure.
@@ -130,42 +120,68 @@ public func image(url: String) -> HTML {
   return HTMLNode(tag: "img", child: nil).attr("src", url)
 }
 
-public func tableGrid(@HTMLBuilder child: () -> HTML) -> HTML {
+/// Inserts a `<table>` element into the HTML document, and closes with `</table>` after the contents of the closure. You may enter whatever you want into further elements, but they must be related to the `<table>` element.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<table></table>` element.
+public func `table`(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "table", child: child())
 }
 
+/// Inserts a `<thead>` element into the HTML document, and closes with `</thead>` after the contents of the closure. You may enter whatever you want into further elements, but they must be related to the `<thead>` elememt.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<ul></ul>` element.
 public func tableHead(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "thead", child: child())
 }
 
+/// Inserts a `<th>` element into the HTML document, and closes with `</th>` after the contents of the closure.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<th></th>` element.
 public func tableHeadData(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "th", child: child())
 }
 
+/// Inserts a `<tbody>` element into the HTML document, and closes with `</tbody>` after the contents of the closure.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<tbody></tbody>` element.
 public func tableBody(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "tbody", child: child())
 }
 
+/// Inserts a `<tr>` element into the HTML document, and closes with `</tr>` after the contents of the closure.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<tr></tr>` element.
 public func tableRow(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "tr", child: child())
 }
 
+/// Inserts a `<td>` element into the HTML document, and closes with `</td>` after the contents of the closure. This is usually the lowest form of signifying a data cell in a HTML table.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<td></td>` element.
 public func tableData(@HTMLBuilder child: () -> HTML?) -> HTML {
   return HTMLNode(tag: "td", child: child())
 }
 
+/// Inserts a `<sup>` element into the HTML document, and closes with `</sup>` after the contents of the closure. Used to make text look higher than other text.
+/// - Parameters:
+///   - value: `String` content to go inside the `<sup></sup>` element.
 public func superscript(value: String) -> HTML {
   return HTMLNode(tag: "sup", child: value)
 }
 
+/// Inserts a `<sub>` element into the HTML document, and closes with `</sub>` after the contents of the closure.  Used to make text look lower than other text.
+/// - Parameters:
+///   - value: `String` content to go inside the `<sub></sub>` element.
 public func `subscript`(value: String) -> HTML {
   return HTMLNode(tag: "sub", child: value)
 }
 
+/// Inserts a `<caption>` element into the HTML document, and closes with `</caption>` after the contents of the closure. Each element in the closure must be of type `listItem`.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<caption></caption>` element.
 public func caption(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "caption", child: child())
 }
-
 
 /// Inserts a custom element into the HTML document with your specified tag, and closes with the closing of that tag after the contents of the closure. For example, if you specify `"any-tag"` for the tag, then the HTML element will look like: `<any-tag></any-tag>`
 /// - Parameters:
@@ -175,113 +191,7 @@ public func custom(tag: String, @HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: tag, child: child())
 }
 
-
 /// This allows you to iterate over a collection of data that will be rendered into HTML. By inspecting the variable passed into the closure, you can choose to insert it via a HTML node, or do nothing.
 public func forEach<Coll: Collection>(_ data: Coll, @HTMLBuilder content: @escaping (Coll.Element) -> HTML) -> HTML {
   return MultiNode(children: data.map(content))
-}
-
-public enum Scope: String {
-  case row = "row"
-  case column = "column"
-  case rowGroup = "rowgroup"
-  case columnGroup = "colgroup"
-}
-
-public enum Alignment: String {
-  case left = "left"
-  case right = "right"
-  case center = "center"
-  case justified = "justified"
-}
-
-extension HTML {
-  /// Allows you to specify a `class` attribute at the end of a HTML element. For example, if you specify `div { "some text" }.class("menu")`, then the rendered HTML will be `<div class="menu">some text</div>`.
-  /// - Note: In a HTML document, classes can be reused many times, and are not treated uniquely like ids.
-  /// - Parameters:
-  ///   - value: The value that will be associated with the `class` tag.
-  public func `class`(_ value: String) -> HTML {
-    return attr("class", value)
-  }
-  
-  /// Allows you to specify a `id` attribute at the end of a HTML element. For example, if you specify `div { "some text" }.id("12345")`, then the rendered HTML will be `<div id="12345">some text</div>`.
-  /// - Warning: In a HTML document, IDs must be considered unique, and cannot be reused.
-  /// - Parameters:
-  ///   - value: The value that will be associated with the `id` tag.
-  public func `id`(_ value: String) -> HTML {
-    return attr("id", value)
-  }
-  
-  public func columnSpan(_ value: Int) -> HTML {
-    return attr("colspan", String(value))
-  }
-  
-  public func rowSpan(_ value: Int) -> HTML {
-    return attr("rowspan", String(value))
-  }
-  
-  public func scope(_ value: Scope) -> HTML {
-    return attr("scope", value.rawValue)
-  }
-  
-  public func alignment(_ value: Alignment) -> HTML {
-    return attr("align", value.rawValue)
-  }
-  
-  public func backgroundColor(_ hexCode: String) -> HTML {
-    return attr("bgcolor", hexCode)
-  }
-  
-  /// Allow you to specify a media type for a HTML element.
-  ///
-  /// This could  be used for link,  script, input, and any other tags which support it.
-  /// - Note: Look at IANA Media Types for a complete list of standard media types.
-  /// - Example: This:
-  /// ```
-  /// linkStyleSheet(url: "style.css").type("text/css")
-  /// ```
-  /// yields this:
-  /// ```
-  /// <link type="text/css" rel="stylesheet" href="style.css"/>
-  /// ```
-  /// - Parameter mime: The Internet media type of the linked document.
-  public func type(_ mime: String) -> HTML {
-    return attr("type", mime)
-  }
-  
-  /// Allows you to specify inline CSS (cascading style sheets) style for a HTML element.
-  /// - Note: Inline CSS style on HTML elements is often times frowned upon. It is recommended to instead use a link to a separate stylesheet that is defined on its own. You can do this with the `linkStylesheet()` builder.
-  /// - Example: This:
-  /// ```
-  /// div {
-  ///   "some text"
-  /// }.style([StyleAttribute(key: "color", value: "blue"])
-  /// ```
-  /// yields this:
-  /// ```
-  /// <div style="color:blue">some text</div>
-  /// ```
-  /// - Parameters:
-  ///   - attributes: An array of structs typed `StyleAttribute` that contain a key and value for inline styling.
-  public func style(_ attributes: [StyleAttribute]) -> HTML {
-    var inlineStyle = String()
-    for (index, attribute) in attributes.enumerated() {
-      inlineStyle.write(attribute.key)
-      inlineStyle.write(":")
-      inlineStyle.write(attribute.value)
-      if index == 0, attributes.count > 1, index != attributes.count - 1 {
-        inlineStyle.write(";")
-      }
-    }
-    return attr("style", inlineStyle)
-  }
-  
-  /// Allows you to specify any attribute at the end of a HTML element. For example, if you specify `div { "some text" }.attr("tag", "123")`, then the rendered HTML will be `<div tag="123">some text</div>`.
-  /// - Parameters:
-  ///   - key: The tag for the attribute that will be added to this HTML node
-  ///   - value: The value that will be associated with the tag.
-  public func attr(_ key: String, _ value: String? = nil) -> HTML {
-    return AttributedNode(attribute: Attribute(key: key, value: value),
-                          child: self)
-  }
 }

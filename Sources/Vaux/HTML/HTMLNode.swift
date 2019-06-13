@@ -12,6 +12,7 @@ import Foundation
 struct HTMLNode: HTML {
   var tag: String
   var child: HTML?
+  var inline = false
   
   func getTag() -> String? {
     return self.tag
@@ -43,13 +44,21 @@ struct HTMLNode: HTML {
     }
     
     stream.write(">")
-    stream.writeNewline()
-    stream.withIndent {
-      child.renderAsHTML(into: stream, attributes: [])
-    }
     
+    /// Check to see if the tag being streamed should write its child and close it on the same line
+    if inline {
+      if let childString = child as? String {
+        stream.write(childString)
+      }
+    /// Otherwise, add the child indented on a new line
+    } else {
+      stream.writeNewline()
+      stream.withIndent {
+        child.renderAsHTML(into: stream, attributes: [])
+      }
+      stream.writeIndent()
+    }
     /// Add a new line and write the closing tag.
-    stream.writeIndent()
     stream.write("</")
     stream.write(tag)
     stream.write(">")

@@ -57,4 +57,3 @@ public struct HTMLBuilder {
     return second
   }
 }
-
