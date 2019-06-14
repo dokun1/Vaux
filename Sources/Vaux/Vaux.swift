@@ -14,7 +14,7 @@ import Foundation
 public class Vaux {
   public enum VauxOutput {
     case stdout
-    case file(name: String, path: String)
+    case file(filepath: Filepath)
   }
   
   /// Initializer must be public to create instance
@@ -28,9 +28,10 @@ public class Vaux {
     switch outputLocation {
     case .stdout:
       return HTMLOutputStream(FileHandle.standardOutput, content.getTag())
-    case .file(let filename, let path):
+    case .file(let filepath):
       do {
-        guard let url = VauxFileHelper.createFile(named: filename, path: path) else {
+        
+        guard let url = VauxFileHelper.createFile(filepath) else {
           throw VauxFileHelperError.noFile
         }
         let handler = try FileHandle(forWritingTo: url)
