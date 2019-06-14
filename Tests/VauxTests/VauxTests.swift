@@ -540,6 +540,38 @@ final class VauxTests: XCTestCase {
   }
   
   func testScriptCode() {
+    let scriptID = "script"
+    func pageWithJavascript() -> HTML {
+      html {
+        body {
+          paragraph { "" }.id(scriptID)
+          script(code: "document.getElementById('\(scriptID)').innerHTML = 'Hello JavaScript!';")
+        }
+      }
+    }
+    let correctHTML = """
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <p id="\(scriptID)">
+            </p>
+            <script>
+              document.getElementById('\(scriptID)').innerHTML = 'Hello JavaScript!';
+            </script>
+          </body>
+        </html>
+        """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithJavascript())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testScriptFile() {
     func buildPage() -> HTML {
       html {
         body {
@@ -555,7 +587,7 @@ final class VauxTests: XCTestCase {
           </script>
         </body>
       </html>
-    """.replacingOccurrences(of: "\n", with: "")
+      """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
     vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
@@ -603,6 +635,8 @@ final class VauxTests: XCTestCase {
     ("testNestedPages", testNestedPages),
     ("testImage", testImage),
     ("testAttributes", testAttributes),
-    ("testSpan", testSpan)
+    ("testSpan", testSpan),
+    ("testScriptCode", testScriptCode),
+    ("testScriptFile", testScriptFile),
   ]
 }
