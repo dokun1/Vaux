@@ -128,4 +128,8 @@ extension HTML {
   public func type(_ mime: String) -> HTML {
     return attr("type", mime)
   }
+  
+  public func type(_ mime: MIME) -> HTML {
+    return attr("type", mime.rawValue)
+  }
 }

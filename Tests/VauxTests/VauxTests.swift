@@ -448,6 +448,41 @@ final class VauxTests: XCTestCase {
   func testNestedPages() {
     func masterPage() -> HTML {
       html {
+        linkStylesheet(url: "/tmp/style.css").type(.css)
+        body {
+          childPage()
+        }
+      }
+    }
+    func childPage() -> HTML {
+      div {
+        "Some div content"
+        }.id("abcd")
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <link type="text/css" rel="stylesheet" href="/tmp/style.css"/>
+      <body>
+        <div id="abcd">
+          Some div content
+        </div>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: masterPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testCustomMIME() {
+    func masterPage() -> HTML {
+      html {
         linkStylesheet(url: "/tmp/style.css").type("text/css")
         body {
           childPage()
