@@ -2,7 +2,7 @@
 # Vaux
 
 <p align="left">
-<a href="https://swift.org">
+  <a href="https://swift.org">
     <img src="https://img.shields.io/badge/swift-5.1-orange.svg" alt="Swift Version">
   </a>
   <a href="https://swift.org/package-manager/">
@@ -10,6 +10,9 @@
   </a>
   <a href="https://choosealicense.com/licenses/apache/">
     <img src="https://img.shields.io/badge/license-Apache-red.svg" alt="Apache License">
+  </a>
+  <a href="https://travis-ci.com/mbarnach/Vaux"/>
+    <img src="https://travis-ci.com/mbarnach/Vaux.svg?branch=master">
   </a>
 </p>
 
