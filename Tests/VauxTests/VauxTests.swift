@@ -60,13 +60,13 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-    <!DOCTYPE html>
-    <html>
-      <body>
-        <a href="\(url)">google</a>
-      </body>
-    </html>
-    """.replacingOccurrences(of: "\n", with: "")
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <a href="\(url)">google</a>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
     vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
@@ -87,15 +87,15 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-    <!DOCTYPE html>
-    <html>
-      <body>
-        <a href="\(url)">
-          google
-        </a>
-      </body>
-    </html>
-    """.replacingOccurrences(of: "\n", with: "")
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <a href="\(url)">
+            google
+          </a>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
     vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
@@ -120,17 +120,17 @@ final class VauxTests: XCTestCase {
       }
     }
     let correctHTML = """
-    <!DOCTYPE html>
-    <html>
-      <body>
-        <a href="\(url)">
-          <p>
-            google
-          </p>
-        </a>
-      </body>
-    </html>
-    """.replacingOccurrences(of: "\n", with: "")
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <a href="\(url)">
+            <p>
+              google
+            </p>
+          </a>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
     vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
@@ -205,7 +205,7 @@ final class VauxTests: XCTestCase {
             "When I was "
             span {
               "a young boy, "
-            }.style([StyleAttribute(key: "color", value: "blue")])
+              }.style([StyleAttribute(key: "color", value: "blue")])
             "my father took me into the city."
           }
         }
@@ -415,8 +415,8 @@ final class VauxTests: XCTestCase {
           paragraph {
             "Four score and seven years ago..."
           }
-        }.style([StyleAttribute(key: "background-color", value: "blue"),
-                 StyleAttribute(key: "color", value: "red")])
+          }.style([StyleAttribute(key: "background-color", value: "blue"),
+                   StyleAttribute(key: "color", value: "red")])
       }
     }
     let correctHTML = """
@@ -492,7 +492,7 @@ final class VauxTests: XCTestCase {
     func childPage() -> HTML {
       div {
         "Some div content"
-      }.id("abcd")
+        }.id("abcd")
     }
     let correctHTML = """
     <!DOCTYPE html>
@@ -535,8 +535,8 @@ final class VauxTests: XCTestCase {
     let vaux = Vaux()
     vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
-        let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithImage())
-        XCTAssertEqual(rendered, correctHTML)
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithImage())
+      XCTAssertEqual(rendered, correctHTML)
     } catch let error {
       XCTFail(error.localizedDescription)
     }
@@ -564,6 +564,65 @@ final class VauxTests: XCTestCase {
       </body>
     </html>
     """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testScriptCode() {
+    let scriptID = "script"
+    func pageWithJavascript() -> HTML {
+      html {
+        body {
+          paragraph { "" }.id(scriptID)
+          script(code: "document.getElementById('\(scriptID)').innerHTML = 'Hello JavaScript!';")
+        }
+      }
+    }
+    let correctHTML = """
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <p id="\(scriptID)">
+            </p>
+            <script>
+              document.getElementById('\(scriptID)').innerHTML = 'Hello JavaScript!';
+            </script>
+          </body>
+        </html>
+        """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithJavascript())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testScriptFile() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          script(filepath: Filepath(name: "script.js", path: ""))
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <script src="script.js">
+          </script>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
     let vaux = Vaux()
     vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
@@ -611,7 +670,8 @@ final class VauxTests: XCTestCase {
     ("testNestedPages", testNestedPages),
     ("testImage", testImage),
     ("testAttributes", testAttributes),
-    ("testSpan", testSpan)
+    ("testSpan", testSpan),
+    ("testScriptCode", testScriptCode),
+    ("testScriptFile", testScriptFile),
   ]
 }
-

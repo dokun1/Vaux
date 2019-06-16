@@ -174,6 +174,19 @@ public func span(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "span", child: child())
 }
 
+/// Inserts a `<script>...</script>` element into the HTML document for inline scripting.
+/// - Parameter child: `HTML`
+public func script(code: String) -> HTML {
+    return HTMLNode(tag: "script", child: code)
+}
+
+/// Inserts a `<script src="src"></scrip>` element into the HTML document.
+/// - Parameter src: The localtion of the script to insert.
+public func script(filepath: Filepath) -> HTML {
+    return HTMLNode(tag: "script", child: "")
+      .attr("src", "\(filepath.path)\(filepath.name)")
+}
+
 /// Inserts a `<sup>` element into the HTML document, and closes with `</sup>` after the contents of the closure. Used to make text look higher than other text.
 /// - Parameters:
 ///   - value: `String` content to go inside the `<sup></sup>` element.
