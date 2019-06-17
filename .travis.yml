@@ -3,9 +3,6 @@ matrix:
     - os: linux
       dist: bionic
       sudo: required
-    - os: osx
-      osx_image: xcode11
-      sudo: required
 
 before_install:
   - git clone https://github.com/IBM-Swift/Package-Builder.git
