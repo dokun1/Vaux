@@ -202,9 +202,9 @@ final class VauxTests: XCTestCase {
       html {
         body {
           paragraph {
-            "When I was "
+            "When I was"
             span {
-              "a young boy, "
+              "a young boy,"
               }.style([StyleAttribute(key: "color", value: "blue")])
             "my father took me into the city."
           }
