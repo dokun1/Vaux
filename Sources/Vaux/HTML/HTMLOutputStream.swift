@@ -11,7 +11,7 @@ import Foundation
 /// A helper class for rendering formatted HTML to a given `TextOutputStream`.
 public class HTMLOutputStream {
   public internal(set) var output: TextOutputStream
-  
+
   /// Create an `HTMLOutputStream` that will render `HTML` nodes as HTML text.
   public init(_ output: TextOutputStream, _ tag: String?) {
     self.output = output
@@ -20,43 +20,43 @@ public class HTMLOutputStream {
       writeNewline()
     }
   }
-  
+
   var indentation: Int = 0
-  
+
   func withIndent(_ f: () -> Void) {
     indentation += 2
     f()
     indentation -= 2
   }
-  
+
   func writeIndent() {
     write(String(repeating: " ", count: indentation))
   }
-  
+
   func line<Str: StringProtocol>(_ line: Str) {
     writeIndent()
     write(line)
     writeNewline()
   }
-  
+
   func write<Str: StringProtocol>(_ text: Str) {
     output.write(String(text))
   }
-  
+
   func writeDoubleQuoted(_ string: String) {
     write("\"")
     write(string)
     write("\"")
   }
-  
+
   func writeNewline() {
     write("\n")
   }
-  
+
   func writeCarriageReturn() {
     write("\r")
   }
-  
+
   func writeEscaped<Str: StringProtocol>(_ string: Str) {
     for c in string {
       switch c {
@@ -68,7 +68,7 @@ public class HTMLOutputStream {
       }
     }
   }
-  
+
   /// Renders the provided `HTML` node as HTML text to the receiver's stream.
   public func render(_ content: HTML) {
     content.renderAsHTML(into: self, attributes: [])

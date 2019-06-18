@@ -13,38 +13,38 @@ struct HTMLNode: HTML {
   var tag: String
   var child: HTML?
   var inline = false
-  
+
   func getTag() -> String? {
     return self.tag
   }
-  
+
   func renderAsHTML(into stream: HTMLOutputStream, attributes: [Attribute]) {
     /// Open the tag
     stream.writeIndent()
     stream.write("<")
     stream.write(tag)
-    
+
     /// Append the tag with all attributes.
     for attr in attributes {
       stream.write(" ")
       stream.write(attr.key)
-      
+
       /// If an attribute does not have a value, do not add the equal sign.
       if let value = attr.value {
         stream.write("=")
         stream.writeDoubleQuoted(value)
       }
     }
-    
+
     /// If the element has no children, close it on the same line.
     guard let child = child else {
       stream.write("/>")
       stream.writeNewline()
       return
     }
-    
+
     stream.write(">")
-    
+
     /// Check to see if the tag being streamed should write its child and close it on the same line
     if inline {
       if let childString = child as? String {
@@ -83,11 +83,11 @@ public struct StyleAttribute {
 struct AttributedNode: HTML {
   let attribute: Attribute
   let child: HTML
-  
+
   func getTag() -> String? {
     return child.getTag()
   }
-  
+
   func renderAsHTML(into stream: HTMLOutputStream, attributes: [Attribute]) {
     var fullAttrs = attributes
     fullAttrs.append(attribute)
@@ -98,11 +98,11 @@ struct AttributedNode: HTML {
 /// MultiNode is an implementation detail for representing multiple sequenced
 /// HTML nodes
 struct MultiNode: HTML {
-  
+
   func getTag() -> String? {
     return nil
   }
-  
+
   let children: [HTML]
   func renderAsHTML(into stream: HTMLOutputStream, attributes: [Attribute]) {
     for child in children {
@@ -110,4 +110,3 @@ struct MultiNode: HTML {
     }
   }
 }
-
