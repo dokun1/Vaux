@@ -24,5 +24,5 @@ extension VauxFileHelperError: LocalizedError {
 }
 
 enum VauxError: Error {
-  
+
 }

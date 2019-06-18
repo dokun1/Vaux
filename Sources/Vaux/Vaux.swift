@@ -16,13 +16,13 @@ public class Vaux {
     case stdout
     case file(filepath: Filepath)
   }
-  
+
   /// Initializer must be public to create instance
   public init() { }
-  
+
   /// Default parameter for where render output goes
   public var outputLocation: VauxOutput = .stdout
-  
+
   /// Handles retrieving correct `HTMLOutputStream` for where rendered document will go
   private func getStream(for content: HTML) throws -> HTMLOutputStream {
     switch outputLocation {
@@ -30,7 +30,6 @@ public class Vaux {
       return HTMLOutputStream(FileHandle.standardOutput, content.getTag())
     case .file(let filepath):
       do {
-        
         guard let url = VauxFileHelper.createFile(filepath) else {
           throw VauxFileHelperError.noFile
         }
@@ -41,7 +40,7 @@ public class Vaux {
       }
     }
   }
-  
+
   /// Renders `HTML` into a static HTML file.
   /// - Parameters:
   ///   - content: A function that builds `HTML` that you intend to render.
@@ -54,4 +53,3 @@ public class Vaux {
     }
   }
 }
-
