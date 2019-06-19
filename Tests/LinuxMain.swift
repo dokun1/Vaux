@@ -6,4 +6,3 @@ var tests = [XCTestCaseEntry]()
 tests += VauxTests.allTests()
 //tests += VauxTableTests.allTests()
 XCTMain(tests)
-

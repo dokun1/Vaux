@@ -6,11 +6,11 @@ import PackageDescription
 let package = Package(
     name: "Vaux",
     products: [
-        .library(name: "Vaux", targets: ["Vaux"]),
+        .library(name: "Vaux", targets: ["Vaux"])
     ],
     dependencies: [],
     targets: [
         .target(name: "Vaux", dependencies: []),
-        .testTarget(name: "VauxTests", dependencies: ["Vaux"]),
+        .testTarget(name: "VauxTests", dependencies: ["Vaux"])
     ]
 )

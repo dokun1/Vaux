@@ -39,7 +39,7 @@ final class VauxTests: XCTestCase {
       </body>
     </html>
     """.replacingOccurrences(of: "\n", with: "")
-    
+
     let vaux = Vaux()
     vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
@@ -49,7 +49,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testLinkInline() {
     var url = "https://google.com"
     func pageWithLink() -> HTML {
@@ -76,7 +76,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testLink() {
     var url = "https://google.com"
     func pageWithLink() -> HTML {
@@ -105,7 +105,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testLinkWithChild() {
     var url = "https://google.com"
     func pageWithLink() -> HTML {
@@ -140,7 +140,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testLinebreak() {
     func pageWithLinebreak() -> HTML {
       html {
@@ -166,7 +166,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testArticle() {
     func pageWithArticle() -> HTML {
       html {
@@ -196,15 +196,15 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testSpan() {
     func pageWithSpan() -> HTML {
       html {
         body {
           paragraph {
-            "When I was "
+            "When I was"
             span {
-              "a young boy, "
+              "a young boy,"
               }.style([StyleAttribute(key: "color", value: "blue")])
             "my father took me into the city."
           }
@@ -234,7 +234,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testEmphasis() {
     func pageWithLink() -> HTML {
       html {
@@ -270,7 +270,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testStdout() {
     func buildPage() -> HTML {
       html {
@@ -285,7 +285,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testLists() {
     func pageWithLists() -> HTML {
       html {
@@ -296,7 +296,7 @@ final class VauxTests: XCTestCase {
             }
           }
           orderedList {
-            forEach(1...3) { counter in
+            forEach(1...3) { _ in
               listItem(label: "item")
             }
           }
@@ -341,7 +341,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testDiv() {
     func pageWithDivs() -> HTML {
       html {
@@ -371,7 +371,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testCustomTag() {
     func pageWithCustomTag() -> HTML {
       html {
@@ -401,7 +401,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testHeading() {
     func pageWithHeading() -> HTML {
       html {
@@ -444,7 +444,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testNestedPages() {
     func masterPage() -> HTML {
       html {
@@ -479,7 +479,29 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
+  func testMIME() {
+    func masterPage() -> HTML {
+      html {
+        linkStylesheet(url: "/tmp/style.css").type(.css)
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <link type="text/css" rel="stylesheet" href="/tmp/style.css"/>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: masterPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+
   func testCustomMIME() {
     func masterPage() -> HTML {
       html {
@@ -492,7 +514,7 @@ final class VauxTests: XCTestCase {
     func childPage() -> HTML {
       div {
         "Some div content"
-        }.id("abcd")
+      }.id("abcd")
     }
     let correctHTML = """
     <!DOCTYPE html>
@@ -514,7 +536,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testImage() {
     var url = "my_image.png"
     func pageWithImage() -> HTML {
@@ -541,7 +563,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testAttributes() {
     func buildPage() -> HTML {
       html {
@@ -573,7 +595,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testScriptCode() {
     let scriptID = "script"
     func pageWithJavascript() -> HTML {
@@ -605,7 +627,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testScriptFile() {
     func buildPage() -> HTML {
       html {
@@ -632,7 +654,7 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   public static func renderForTesting(with vaux: Vaux, html: HTML) throws -> String {
     do {
       try vaux.render(html)
@@ -642,10 +664,10 @@ final class VauxTests: XCTestCase {
       throw error
     }
   }
-  
+
   public static func getLocalFileForTesting(named: String) throws -> String {
     do {
-      let thisPathArray = #file.split(separator: "/").map{String($0)}.dropLast()
+      let thisPathArray = #file.split(separator: "/").map {String($0)}.dropLast()
       var newPath = "/"
       for component in thisPathArray { newPath.append(component + "/") }
       return try VauxFileHelper.getRenderedContent(from: Filepath(name: named, path: newPath))
@@ -653,7 +675,7 @@ final class VauxTests: XCTestCase {
       throw error
     }
   }
-  
+
   static var allTests = [
     ("testSimplePage", testSimplePage),
     ("testLink", testLink),
@@ -668,10 +690,12 @@ final class VauxTests: XCTestCase {
     ("testLists", testLists),
     ("testHeading", testHeading),
     ("testNestedPages", testNestedPages),
+    ("testMIME", testMIME),
+    ("testCustomMIME", testCustomMIME),
     ("testImage", testImage),
     ("testAttributes", testAttributes),
     ("testSpan", testSpan),
     ("testScriptCode", testScriptCode),
-    ("testScriptFile", testScriptFile),
+    ("testScriptFile", testScriptFile)
   ]
 }

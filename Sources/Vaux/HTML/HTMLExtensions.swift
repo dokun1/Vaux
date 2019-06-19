@@ -16,7 +16,7 @@ extension String: HTML {
       stream.write("\n")
     }
   }
-  
+
   public func getTag() -> String? {
     return nil
   }
@@ -28,7 +28,7 @@ extension Int: HTML {
     let string = String(self)
     string.renderAsHTML(into: stream, attributes: attributes)
   }
-  
+
   public func getTag() -> String? {
     return nil
   }
@@ -40,7 +40,7 @@ extension Double: HTML {
     let string = String(self)
     string.renderAsHTML(into: stream, attributes: attributes)
   }
-  
+
   public func getTag() -> String? {
     return nil
   }
@@ -52,7 +52,7 @@ extension Float: HTML {
     let string = String(self)
     string.renderAsHTML(into: stream, attributes: attributes)
   }
-  
+
   public func getTag() -> String? {
     return nil
   }
@@ -66,7 +66,7 @@ extension Optional: HTML where Wrapped: HTML {
       html.renderAsHTML(into: stream, attributes: attributes)
     }
   }
-  
+
   public func getTag() -> String? {
     if let html = self {
       return html.getTag()

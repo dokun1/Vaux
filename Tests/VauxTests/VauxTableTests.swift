@@ -60,7 +60,7 @@ final class VauxTableTests: XCTestCase {
       </body>
     </html>
     """.replacingOccurrences(of: "\n", with: "")
-    
+
     let vaux = Vaux()
     vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
@@ -70,9 +70,9 @@ final class VauxTableTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   func testComplexTable() {
-    
+
     let valuesOne: [HTML] = ["0.330", "4,879", 5427, "3.7", "4222.6", "57.9", "167", 0, "Closest to the sun"]
     let valuesTwo: [HTML] = ["4.87", "12,104", "5243", "8.9", "2802.0", "108.2", "464", "0", ""]
     let valuesThree: [HTML] = ["5.97", "12,756", "5514", 9.8, "24.0", "149.6", "15", "1", "Our world"]
@@ -94,7 +94,7 @@ final class VauxTableTests: XCTestCase {
                                 link(url: "http://www.usatoday.com/story/tech/2014/10/02/pluto-planet-solar-system/16578959/", label: "remains controversial").class("external").attr("rel", "noopener")
                                 "."
                               }]
-    
+
     func topRow() -> HTML {
       tableRow {
         tableData {
@@ -140,7 +140,7 @@ final class VauxTableTests: XCTestCase {
         }.scope(.column)
       }.backgroundColor("CCCCCC")
     }
-    
+
     func rowOne() -> HTML {
       tableRow {
         tableHeadData {
@@ -156,7 +156,7 @@ final class VauxTableTests: XCTestCase {
         }
       }
     }
-    
+
     func rowTwo() -> HTML {
       tableRow {
         tableHeadData {
@@ -169,7 +169,7 @@ final class VauxTableTests: XCTestCase {
         }
       }
     }
-    
+
     func rowThree() -> HTML {
       tableRow {
         tableHeadData {
@@ -182,7 +182,7 @@ final class VauxTableTests: XCTestCase {
         }
       }
     }
-    
+
     func rowFour() -> HTML {
       tableRow {
         tableHeadData {
@@ -195,7 +195,7 @@ final class VauxTableTests: XCTestCase {
         }
       }
     }
-    
+
     func rowFive() -> HTML {
       tableRow {
         tableHeadData {
@@ -214,7 +214,7 @@ final class VauxTableTests: XCTestCase {
         }
       }
     }
-    
+
     func rowSix() -> HTML {
       tableRow {
         tableHeadData {
@@ -227,7 +227,7 @@ final class VauxTableTests: XCTestCase {
         }
       }
     }
-    
+
     func rowSeven() -> HTML {
       tableRow {
         tableHeadData {
@@ -243,7 +243,7 @@ final class VauxTableTests: XCTestCase {
         }
       }
     }
-    
+
     func rowEight() -> HTML {
       tableRow {
         tableHeadData {
@@ -256,7 +256,7 @@ final class VauxTableTests: XCTestCase {
         }
       }
     }
-    
+
     func rowNine() -> HTML {
       tableRow {
         tableHeadData {
@@ -272,7 +272,7 @@ final class VauxTableTests: XCTestCase {
         }
       }
     }
-    
+
     func complexTable() -> HTML {
       html {
         body {
@@ -301,7 +301,7 @@ final class VauxTableTests: XCTestCase {
         }
       }
     }
-    
+
     let vaux = Vaux()
     //vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
@@ -314,7 +314,7 @@ final class VauxTableTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-  
+
   static var allTests = [
     ("testSimpleTable", testSimpleTable),
     ("testComplexTable", testComplexTable)

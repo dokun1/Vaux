@@ -7,9 +7,8 @@
 
 import Foundation
 
-
 extension HTML {
-  
+
   /// Allows you to specify an `align` attribute at the end of a HTML element. For example, if you specify `div { "some text" }.align(.center)`, then the rendered HTML will be `<div align="center">some text</div>`.
   /// - Note: Alignment can affect multiple different elements with different behavior based on their containing elements. Best practice is to offload this to the associated CSS file.
   /// - Parameters:
@@ -17,7 +16,7 @@ extension HTML {
   public func alignment(_ value: Alignment) -> HTML {
     return attr("align", value.rawValue)
   }
-  
+
   /// Allows you to specify any attribute at the end of a HTML element. For example, if you specify `div { "some text" }.attr("tag", "123")`, then the rendered HTML will be `<div tag="123">some text</div>`.
   /// - Parameters:
   ///   - key: The tag for the attribute that will be added to this HTML node
@@ -26,7 +25,7 @@ extension HTML {
     return AttributedNode(attribute: Attribute(key: key, value: value),
                           child: self)
   }
-  
+
   /// Allows you to specify a `bgcolor` attribute at the end of a HTML element. For example, if you specify `div { "some text" }.backgroundColor("555555")`, then the rendered HTML will be `<div bgcolor="555555">some text</div>`.
   /// - Note: Background color is generally better to set in your associated CSS file. The hex code must be a 6 character hexadecimal string.
   /// - Warning: This will eventually be refactored to allow for use of specific colors that convert to hex codes via an enum. UIColor() must not be used, which would limit this library to iOS only.
@@ -35,7 +34,7 @@ extension HTML {
   public func backgroundColor(_ hexCode: String) -> HTML {
     return attr("bgcolor", hexCode)
   }
-  
+
   /// Allows you to specify a `class` attribute at the end of a HTML element. For example, if you specify `div { "some text" }.class("menu")`, then the rendered HTML will be `<div class="menu">some text</div>`.
   /// - Note: In a HTML document, classes can be reused many times, and are not treated uniquely like ids.
   /// - Parameters:
@@ -43,7 +42,7 @@ extension HTML {
   public func `class`(_ value: String) -> HTML {
     return attr("class", value)
   }
-  
+
   /// Allows you to specify a `color` attribute at the end of a HTML element. For example, if you specify `span { "some text" }.color("555555")`, then the rendered HTML will be `<span color="555555">some text</span>`.
   /// - Note: Color, mostly used with text, is generally better to set in your associated CSS file. The hex code must be a 6 character hexadecimal string.
   /// - Warning: This will eventually be refactored to allow for use of specific colors that convert to hex codes via an enum. UIColor() must not be used, which would limit this library to iOS only.
@@ -52,7 +51,7 @@ extension HTML {
   public func color(_ hexCode: String) -> HTML {
     return attr("color", hexCode)
   }
-  
+
   /// Allows you to specify a `colspan` attribute at the end of a HTML element. For example, if you specify `tableData { "some text" }.columnSpan(4)`, then the rendered HTML will be `<td colspan="4">some text</td>`.
   /// - Note: In a HTML table, colspan is used to define how many columns a particular element should go across. This is easier to see when you have clearly defined borders and cell padding for your table.
   /// - Parameters:
@@ -60,7 +59,7 @@ extension HTML {
   public func columnSpan(_ value: Int) -> HTML {
     return attr("colspan", String(value))
   }
-  
+
   /// Allows you to specify a `id` attribute at the end of a HTML element. For example, if you specify `div { "some text" }.id("12345")`, then the rendered HTML will be `<div id="12345">some text</div>`.
   /// - Warning: In a HTML document, IDs must be considered unique, and cannot be reused.
   /// - Parameters:
@@ -68,7 +67,7 @@ extension HTML {
   public func `id`(_ value: String) -> HTML {
     return attr("id", value)
   }
-  
+
   /// Allows you to specify a `rowspan` attribute at the end of a HTML element. For example, if you specify `tableData { "some text" }.rowSpan(4)`, then the rendered HTML will be `<td rowspan="4">some text</td>`.
   /// - Note: In a HTML table, rowspan is used to define how many rows a particular element should go across. This is easier to see when you have clearly defined borders and cell padding for your table.
   /// - Parameters:
@@ -76,7 +75,7 @@ extension HTML {
   public func rowSpan(_ value: Int) -> HTML {
     return attr("rowspan", String(value))
   }
-  
+
   /// Allows you to specify a `scope` attribute at the end of a HTML element. For example, if you specify `tableData { "some text" }.scope(.row)`, then the rendered HTML will be `<td scope="row">some text</td>`.
   /// - Note: The scope attribute identifies whether a cell is a header for a column, row, or group of columns or rows.
   /// - Parameters:
@@ -84,7 +83,7 @@ extension HTML {
   public func scope(_ value: Scope) -> HTML {
     return attr("scope", value.rawValue)
   }
-  
+
   /// Allows you to specify inline CSS (cascading style sheets) style for a HTML element.
   /// - Note: Inline CSS style on HTML elements is often times frowned upon. It is recommended to instead use a link to a separate stylesheet that is defined on its own. You can do this with the `linkStylesheet()` builder.
   /// - Example: This:
@@ -111,7 +110,7 @@ extension HTML {
     }
     return attr("style", inlineStyle)
   }
-  
+
   /// Allow you to specify a media type for a HTML element.
   ///
   /// This could  be used for link,  script, input, and any other tags which support it.
@@ -128,7 +127,7 @@ extension HTML {
   public func type(_ mime: String) -> HTML {
     return attr("type", mime)
   }
-  
+
   public func type(_ mime: MIME) -> HTML {
     return attr("type", mime.rawValue)
   }

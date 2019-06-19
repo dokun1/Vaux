@@ -19,7 +19,7 @@ public class VauxFileHelper {
     manager.createFile(atPath: "\(file.path)\(file.name).html", contents: nil, attributes: nil)
     return URL(fileURLWithPath: "\(file.path)\(file.name).html")
   }
-  
+
   /// Deletes file with given name at given path.
   public class func deleteFile(_ file: Filepath) throws {
     let manager = FileManager()
@@ -29,7 +29,7 @@ public class VauxFileHelper {
       throw error
     }
   }
-  
+
   /// Returns content from file as `String`, usually effective for testing.
   public class func getRenderedContent(from file: Filepath) throws -> String {
     let manager = FileManager()
