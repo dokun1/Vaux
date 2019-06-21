@@ -21,6 +21,19 @@ public func article(@HTMLBuilder child: () -> HTML) -> HTML {
 
 // MARK: - B
 
+/// Inserts a `<blockquote cite="url">` element into the HTML document, and closes with `</blockquote>` after the contents of the closure.
+/// - Parameters:
+///   - url: The hyperlink source of the quotation.
+///   - inline: If true, use the short quotation tag `<q>`.
+///   - child: `HTML` content to go inside the `<blockquote></blockquote>` element,
+public func blockquote(url: String, inline: Bool = false, @HTMLBuilder child: () -> HTML) -> HTML {
+    if inline {
+        return HTMLNode(tag: "q", child: child(), inline: true).attr("cite", url)
+    } else {
+        return HTMLNode(tag: "blockquote", child: child(), inline: false).attr("cite", url)
+    }
+}
+
 /// Inserts a `<body>` document into the HTML document, and closes with `</body>` after the contents of the closure.
 /// - Parameters:
 ///   - child: `HTML` content to go inside the `<body></body>` element.
@@ -35,6 +48,20 @@ public func body(@HTMLBuilder child: () -> HTML) -> HTML {
 ///   - child: `HTML` content to go inside the `<caption></caption>` element.
 public func caption(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "caption", child: child())
+}
+
+/// Inserts a `<cite>` element into the HTML document, and closes with `</cite>` after the contents of the closure.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<cite></cite>` element.
+public func cite(@HTMLBuilder child: () -> HTML) -> HTML {
+    return HTMLNode(tag: "cite", child: child())
+}
+
+/// Inserts a `<code>` element into the HTML document, and closes with `</code>` after the contents of the closure.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<code></code>` element.
+public func code(@HTMLBuilder child: () -> HTML) -> HTML {
+    return HTMLNode(tag: "code", child: child())
 }
 
 /// Inserts a custom element into the HTML document with your specified tag, and closes with the closing of that tag after the contents of the closure. For example, if you specify `"any-tag"` for the tag, then the HTML element will look like: `<any-tag></any-tag>`
@@ -100,6 +127,13 @@ public func html(@HTMLBuilder child: () -> HTML) -> HTML {
 /// - Parameter url: The url of the image to show on the webpage.
 public func image(url: String) -> HTML {
   return HTMLNode(tag: "img", child: nil).attr("src", url)
+}
+
+/// Inserts a `<i>` element into the HTML document, and closes with `</i>` after the contents of the closure.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<i></i>` element.
+public func italic(@HTMLBuilder child: () -> HTML) -> HTML {
+    return HTMLNode(tag: "i", child: child())
 }
 
 // MARK: - L
@@ -185,6 +219,13 @@ public func script(code: String) -> HTML {
 public func script(filepath: Filepath) -> HTML {
     return HTMLNode(tag: "script", child: "")
       .attr("src", "\(filepath.path)\(filepath.name)")
+}
+
+/// Inserts a `<strong>` element into the HTML document, and closes with `</strong>` after the contents of the closure.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<strong></strong>` element.
+public func strong(@HTMLBuilder child: () -> HTML) -> HTML {
+    return HTMLNode(tag: "strong", child: child())
 }
 
 /// Inserts a `<sup>` element into the HTML document, and closes with `</sup>` after the contents of the closure. Used to make text look higher than other text.

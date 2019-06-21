@@ -270,6 +270,226 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
+  
+  func testTextHighlighting() {
+    func formattedPage() -> HTML {
+      html {
+        body {
+          paragraph {
+            "Four score and"
+            italic { "seven" }
+            "years ago..."
+          }
+        }
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <p>
+          Four score and
+          <i>
+            seven
+          </i>
+          years ago...
+        </p>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: formattedPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testTextStrong() {
+    func formattedPage() -> HTML {
+      html {
+        body {
+          paragraph {
+            "Four score and"
+            strong { "seven" }
+            "years ago..."
+          }
+        }
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <p>
+          Four score and
+          <strong>
+            seven
+          </strong>
+          years ago...
+        </p>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: formattedPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testTextCite() {
+    func formattedPage() -> HTML {
+      html {
+        body {
+          paragraph {
+            cite { "The Scream" }
+            "by Edward Munch. Painted in 1893."
+          }
+        }
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <p>
+          <cite>
+            The Scream
+          </cite>
+          by Edward Munch. Painted in 1893.
+        </p>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: formattedPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testTextBlockquote() {
+    func formattedPage() -> HTML {
+      html {
+        body {
+          heading(.h1) {
+            "About Swift"
+          }
+          blockquote(url: "https://swift.org/about/", inline: true) {
+            "The most obvious way to write code should also behave in a safe manner."
+          }
+        }
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <h1>
+          About Swift
+        </h1>
+        <q cite="https://swift.org/about/">The most obvious way to write code should also behave in a safe manner.</q>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: formattedPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testTextShortQuote() {
+    func formattedPage() -> HTML {
+      html {
+        body {
+          heading(.h1) {
+            "About Swift"
+          }
+          blockquote(url: "https://swift.org/about/") {
+            "Swift is a general-purpose programming language built using a modern approach to safety, performance, and software design patterns."
+          }
+        }
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <h1>
+          About Swift
+        </h1>
+        <blockquote cite="https://swift.org/about/">
+          Swift is a general-purpose programming language built using a modern approach to safety, performance, and software design patterns.
+        </blockquote>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: formattedPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testTextCode() {
+    func formattedPage() -> HTML {
+      html {
+        body {
+          code {
+            """
+            html {
+              body {
+                code {
+                  ...
+                }
+              }
+            }
+            """
+          }
+        }
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <code>
+          html {
+            body {
+              code {
+                ...
+              }
+            }
+          }
+        </code>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: formattedPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
 
   func testStdout() {
     func buildPage() -> HTML {
@@ -684,6 +904,12 @@ final class VauxTests: XCTestCase {
     ("testLinebreak", testLinebreak),
     ("testArticle", testArticle),
     ("testEmphasis", testEmphasis),
+    ("testTextHighlighting", testTextHighlighting),
+    ("testTextStrong", testTextStrong),
+    ("testTextCite", testTextCite),
+    ("testTextBlockquote", testTextBlockquote),
+    ("testTextShortQuote", testTextShortQuote),
+    ("testTextCode", testTextCode),
     ("testStdout", testStdout),
     ("testDiv", testDiv),
     ("testCustomTag", testCustomTag),
