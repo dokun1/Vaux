@@ -39,7 +39,48 @@ final class VauxTests: XCTestCase {
       </body>
     </html>
     """.replacingOccurrences(of: "\n", with: "")
-
+    
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: simplePage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testHTMLSpecial() {
+    var pageTitle = "Page title"
+    var pageBody = "It is 60&deg;F (15.6&deg;C) outside."
+    func simplePage() -> HTML {
+      html {
+        head {
+          title(pageTitle)
+        }
+        body {
+          div {
+            pageBody
+          }
+        }
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>
+          Page title
+        </title>
+      </head>
+      <body>
+        <div>
+          It is 60&deg;F (15.6&deg;C) outside.
+        </div>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    
     let vaux = Vaux()
     vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
     do {
