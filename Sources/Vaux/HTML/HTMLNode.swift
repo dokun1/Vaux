@@ -68,13 +68,13 @@ struct HTMLNode: HTML {
 
 // MARK: - Concatenative HTML Attributes
 public struct Attribute {
-  let key: String
-  let value: String?
+  public let key: String
+  public let value: String?
 }
 
 public struct StyleAttribute {
-  let key: String
-  let value: String
+  public let key: String
+  public let value: String
 }
 
 /// Wraps an HTML object with a given attribute. these attributes are collected
