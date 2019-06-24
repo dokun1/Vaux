@@ -4,6 +4,7 @@
 //
 //  Created by David Okun on 6/6/19.
 //
+// Many of the HTML examples are taken from w3schools.com.
 
 import XCTest
 @testable import Vaux
@@ -370,6 +371,82 @@ final class VauxTests: XCTestCase {
             seven
           </strong>
           years ago...
+        </p>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: formattedPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testTextBold() {
+    func formattedPage() -> HTML {
+      html {
+        body {
+          paragraph {
+            "This is normal text -"
+            bold {
+              "and this is bold text"
+            }
+            "."
+          }
+        }
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <p>
+          This is normal text -
+          <b>
+            and this is bold text
+          </b>
+          .
+        </p>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: formattedPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testTextMark() {
+    func formattedPage() -> HTML {
+      html {
+        body {
+          paragraph {
+            "Do not forget to buy"
+            mark {
+              "milk"
+            }
+            "today."
+          }
+        }
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <p>
+          Do not forget to buy
+          <mark>
+            milk
+          </mark>
+          today.
         </p>
       </body>
     </html>
@@ -915,7 +992,653 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
-
+  
+  func testAbbreviation() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          "The"
+          abbreviation(title: "World Health Organization") { "WHO" }
+          "was founded in 1948."
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          The
+          <abbr title="World Health Organization">
+            WHO
+          </abbr>
+          was founded in 1948.
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testAdress() {
+    func buildPage() -> HTML {
+    html {
+        body {
+          address {
+            "Written by Jon Doe."
+            lineBreak()
+            "Visit us at:"
+            lineBreak()
+            "Example.com"
+            lineBreak()
+            "Box 564, Disneyland"
+            lineBreak()
+            "USA"
+          }
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <address>
+            Written by Jon Doe.
+            <br/>
+            Visit us at:
+            <br/>
+            Example.com
+            <br/>
+            Box 564, Disneyland
+            <br/>
+            USA
+          </address>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testArea() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          map(name: "planetmap") {
+            area(rectangle: (x1: 0, y1: 0, x2: 82, y2: 126), url: "sun.htm")
+            area(circle: (x: 90, y: 58, radius: 3), url: "mercur.htm")
+            area(shape: .circle, coords: [124, 58, 8], url: "venus.htm")
+          }
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <map name="planetmap">
+            <area shape="rect" coords="0,0,82,126" href="sun.htm"/>
+            <area shape="circle" coords="90,58,3" href="mercur.htm"/>
+            <area shape="circle" coords="124,58,8" href="venus.htm"/>
+          </map>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testAudio() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          audio(sources:[
+            (url: "horse.ogg", type: .oga),
+            (url: "horse.mp3", type: .mp3)
+            ],
+                unsupportedLabel: "Your browser does not support the audio element.")
+            .attr("controls")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <audio controls>
+            <source src="horse.ogg" type="audio/ogg"/>
+            <source src="horse.mp3" type="audio/mpeg"/>
+            Your browser does not support the audio element.
+          </audio>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testBase() {
+    func buildPage() -> HTML {
+      html {
+        head {
+          base(url: "https://www.w3schools.com/images/", target: .blank)
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <base href="https://www.w3schools.com/images/" target="_blank"/>
+        </head>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testDirection() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          paragraph {
+            directional(direction: .leftToRight) {
+              "This paragraph will go left-to-right."
+            }
+          }
+          paragraph {
+            directional(direction: .rightToLeft) {
+              "This paragraph will go right-to-left."
+            }
+          }
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <p>
+            <bdo dir="ltr">
+              This paragraph will go left-to-right.
+            </bdo>
+          </p>
+          <p>
+            <bdo dir="rtl">
+              This paragraph will go right-to-left.
+            </bdo>
+          </p>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testButton() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          button(type: .button) {
+            "Click Me!"
+            }.attr("onclick", "alert('Hello world!')")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <button onclick="alert('Hello world!')" type="button">
+            Click Me!
+          </button>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testColumnGroup() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          table {
+            columnGroup(styles: [
+              TableColumnStyle(span: 2, styles: [StyleAttribute(key: "background-color", value: "red")]),
+              TableColumnStyle(styles: [StyleAttribute(key: "background-color", value: "yellow")])
+              ])
+            tableRow {
+              tableHeadData {
+                "ISBN"
+              }
+              tableHeadData {
+                "Title"
+              }
+              tableHeadData {
+                "Price"
+              }
+            }
+            tableRow {
+              tableData {
+                3476896
+              }
+              tableData {
+                "My first HTML"
+              }
+              tableData {
+                "$53"
+              }
+            }
+          }
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <table>
+            <colgroup>
+              <col span="2" style="background-color:red"/>
+              <col style="background-color:yellow"/>
+            </colgroup>
+            <tr>
+              <th>
+                ISBN
+              </th>
+              <th>
+                Title
+              </th>
+              <th>
+                Price
+              </th>
+            </tr>
+            <tr>
+              <td>
+                3476896
+              </td>
+              <td>
+                My first HTML
+              </td>
+              <td>
+                $53
+              </td>
+            </tr>
+          </table>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testData() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          paragraph {
+            "The following example displays product names but also associates each name with a product number:"
+          }
+          list {
+            listItem {
+              data(value: "21053") {
+                "Cherry Tomato"
+              }
+            }
+            listItem {
+              data(value: "21054") {
+                "Beef Tomato"
+              }
+            }
+            listItem {
+              data(value: "21055") {
+                "Snack Tomato"
+              }
+            }
+          }
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <p>
+            The following example displays product names but also associates each name with a product number:
+          </p>
+          <ul>
+            <li>
+              <data value="21053">
+                Cherry Tomato
+              </data>
+            </li>
+            <li>
+              <data value="21054">
+                Beef Tomato
+              </data>
+            </li>
+            <li>
+              <data value="21055">
+                Snack Tomato
+              </data>
+            </li>
+          </ul>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testDataList() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          form {
+            input().attr("name", "browser").attr("list", "browsers")
+            data(list: [
+              "Internet Explorer",
+              "Firefox",
+              "Chrome",
+              "Opera",
+              "Safari"], id: "browsers")
+            input(type: .submit)
+            }.attr("method", "get").attr("action", "/action_page.php")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <form action="/action_page.php" method="get">
+            <input list="browsers" name="browser"/>
+            <datalist id="browsers">
+              <option value="Internet Explorer"/>
+              <option value="Firefox"/>
+              <option value="Chrome"/>
+              <option value="Opera"/>
+              <option value="Safari"/>
+            </datalist>
+            <input type="submit"/>
+          </form>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testDescriptionList() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          descriptionList {
+            define {
+              "Coffee"
+            }
+            describe {
+              "Black hot drink"
+            }
+            define {
+              "Milk"
+            }
+            describe {
+              "White cold drink"
+            }
+          }
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <dl>
+            <dt>
+              Coffee
+            </dt>
+            <dd>
+              Black hot drink
+            </dd>
+            <dt>
+              Milk
+            </dt>
+            <dd>
+              White cold drink
+            </dd>
+          </dl>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testDeletionReplacement() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          paragraph {
+            "My favorite color is"
+            delete {
+              "blue"
+            }
+            insert {
+              "red"
+            }
+            "!"
+          }
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <p>
+            My favorite color is
+            <del>
+              blue
+            </del>
+            <ins>
+              red
+            </ins>
+            !
+          </p>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testDetails() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          details {
+            summary {
+              "License."
+            }
+            paragraph {
+              "Apache License 2.0"
+            }
+          }
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <details>
+            <summary>
+              License.
+            </summary>
+            <p>
+              Apache License 2.0
+            </p>
+          </details>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testDefining() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          paragraph {
+            defining {
+              abbreviation(title: "HyperText Markup Language") {
+                "HTML"
+              }
+            }
+            "is the standard markup language for creating web pages."
+          }
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <p>
+            <dfn>
+              <abbr title="HyperText Markup Language">
+                HTML
+              </abbr>
+            </dfn>
+            is the standard markup language for creating web pages.
+          </p>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testDialog() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          dialog(open: true) {
+            paragraph {
+              "Greetings, one and all!"
+            }
+          }
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <dialog open>
+            <p>
+              Greetings, one and all!
+            </p>
+          </dialog>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
   public static func renderForTesting(with vaux: Vaux, html: HTML) throws -> String {
     do {
       try vaux.render(html)
@@ -947,6 +1670,8 @@ final class VauxTests: XCTestCase {
     ("testEmphasis", testEmphasis),
     ("testTextHighlighting", testTextHighlighting),
     ("testTextStrong", testTextStrong),
+    ("testTextBold", testTextBold),
+    ("testTextMark", testTextMark),
     ("testTextCite", testTextCite),
     ("testTextBlockquote", testTextBlockquote),
     ("testTextShortQuote", testTextShortQuote),
@@ -963,6 +1688,20 @@ final class VauxTests: XCTestCase {
     ("testAttributes", testAttributes),
     ("testSpan", testSpan),
     ("testScriptCode", testScriptCode),
-    ("testScriptFile", testScriptFile)
+    ("testScriptFile", testScriptFile),
+    ("testAbbreviation", testAbbreviation),
+    ("testAdress", testAdress),
+    ("testAudio", testAudio),
+    ("testBase", testBase),
+    ("testDirection", testDirection),
+    ("testButton", testButton),
+    ("testColumnGroup", testColumnGroup),
+    ("testData", testData),
+    ("testDataList", testDataList),
+    ("testDescriptionList", testDescriptionList),
+    ("testDeletionReplacement", testDeletionReplacement),
+    ("testDetails", testDetails),
+    ("testDefining", testDefining),
+    ("testDialog", testDialog),
   ]
 }

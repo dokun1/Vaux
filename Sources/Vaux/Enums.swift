@@ -33,6 +33,72 @@ public enum HeadingWeight: String {
   case h6 = "h6"
 }
 
+public enum AreaShape: String {
+  case `default`    = "default"
+  case rectangular  = "rect"
+  case circle       = "circle"
+  case polygonal    = "poly"
+}
+
+public enum BaseTarget {
+  case blank
+  case `self`
+  case parent
+  case top
+  case framename(String)
+  
+  var toString: String {
+    switch self {
+    case .blank:
+      return "_blank"
+    case .`self`:
+      return "_self"
+    case .parent:
+      return "_parent"
+    case .top:
+      return "_top"
+    case .framename(let name):
+      return name
+    }
+  }
+}
+
+public enum Direction: String {
+  case leftToRight = "ltr"
+  case rightToLeft = "rtl"
+}
+
+public enum ButtonType: String {
+  case button = "button"
+  case submit = "submit"
+  case reset  = "reset"
+}
+
+public enum InputType: String {
+    case button
+    case checkbox
+    case color
+    case date
+    case datetime_local = "datetime_local"
+    case email
+    case file
+    case hidden
+    case image
+    case month
+    case number
+    case password
+    case radio
+    case range
+    case reset
+    case search
+    case submit
+    case tel
+    case text
+    case time
+    case url
+    case week
+}
+
 /// MIME types.
 /// - Note: The most "commons" have been retrieved from: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
 ///
