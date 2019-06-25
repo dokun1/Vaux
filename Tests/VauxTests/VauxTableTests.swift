@@ -105,7 +105,7 @@ final class VauxTableTests: XCTestCase {
         }.scope(.column)
         tableHeadData {
           "Mass (10"
-          superscript(value: "24")
+            superscript { "24" }
           "kg)"
         }.scope(.column)
         tableHeadData {
@@ -113,12 +113,12 @@ final class VauxTableTests: XCTestCase {
         }.scope(.column)
         tableHeadData {
           "Density (kg/m"
-          superscript(value: "3")
+            superscript { "3" }
           ")"
         }.scope(.column)
         tableHeadData {
           "Gravity (m/s"
-          superscript(value: "2")
+            superscript{ "2" }
           ")"
         }.scope(.column)
         tableHeadData {
@@ -126,7 +126,7 @@ final class VauxTableTests: XCTestCase {
         }.scope(.column)
         tableHeadData {
           "Distance from Sun (10"
-          superscript(value: "6")
+            superscript{ "6" }
           "km)"
         }.scope(.column)
         tableHeadData {
