@@ -21,6 +21,7 @@ extension HTML {
   /// - Parameters:
   ///   - key: The tag for the attribute that will be added to this HTML node
   ///   - value: The value that will be associated with the tag.
+  /// - Tag: attr
   public func attr(_ key: String, _ value: String? = nil) -> HTML {
     return AttributedNode(attribute: Attribute(key: key, value: value),
                           child: self)
