@@ -110,3 +110,22 @@ struct MultiNode: HTML {
     }
   }
 }
+
+public struct TableColumnStyle {
+  public let span: Int?
+  public let styles: [StyleAttribute]
+  
+  public init(span: Int? = nil, styles: [StyleAttribute]) {
+    self.span = span
+    self.styles = styles
+  }
+}
+
+extension HTML {
+  func column(from styles: TableColumnStyle) -> HTML {
+    if let span = styles.span {
+      return style(styles.styles).attr("span", "\(span)")
+    }
+    return style(styles.styles)
+  }
+}
