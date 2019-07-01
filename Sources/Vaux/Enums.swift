@@ -110,3 +110,51 @@ public enum MIME: String {
   case _3g2Audio  = "audio/3gpp2" // if it doesn't contain video"
   case _7zip      = "application/x-7z-compressed"
 }
+
+/// Create control for SVG path element.
+public enum SVGPathControl {
+    case moveto(Double, Double, Bool)
+    case lineto(Double, Double, Bool)
+    case horizontalLineto(Double, Double, Bool)
+    case verticalLineto(Double, Double, Bool)
+    case curveto(Double, Double, Bool)
+    case smoothCurveto(Double, Double, Bool)
+    case quadraticBézierCurve(Double, Double, Double?, Bool)
+    case smoothQuadraticBézierCurveto(Double, Double, Double?, Bool)
+    case ellipticalArc(Double, Double, Bool)
+    case closePath
+    case stop
+    
+    public var toString: String {
+        switch self {
+        case let .moveto(x, y, absolute):
+            return "M".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))"
+        case let .lineto(x, y, absolute):
+            return "L".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))"
+        case let .horizontalLineto(x, y, absolute):
+            return "H".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))"
+        case let .verticalLineto(x, y, absolute):
+            return "V".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))"
+        case let .curveto(x, y, absolute):
+            return "C".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))"
+        case let .smoothCurveto(x, y, absolute):
+            return "S".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))"
+        case let .quadraticBézierCurve(x, y, z, absolute):
+            return "Q".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))\(z == nil ? "" : " \(String(format: "%g", z!))")"
+        case let .smoothQuadraticBézierCurveto(x, y, z, absolute):
+            return "T".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))\(z == nil ? "" : " \(String(format: "%g", z!))")"
+        case let .ellipticalArc(x, y, absolute):
+            return "A".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))"
+        case .closePath:
+            return "Z"
+        case .stop:
+            return "0"
+        }
+    }
+}
+
+fileprivate extension String {
+    func `case`(_ absolute: Bool) -> String {
+        return absolute ? self.uppercased() : self.lowercased()
+    }
+}

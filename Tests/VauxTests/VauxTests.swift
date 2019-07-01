@@ -915,6 +915,366 @@ final class VauxTests: XCTestCase {
       XCTFail(error.localizedDescription)
     }
   }
+  
+  func testSVGCustom() {
+    //Todo: Fix it after introducing SVG tags.
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            customSVG(tag: "circle")
+              .attr("fill", "yellow")
+              .attr("stroke-width","4")
+              .attr("stroke","green")
+              .attr("r","40")
+              .attr("cy","50")
+              .attr("cx","50")
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow"/>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGCircle() {
+    //Todo: Fix it after introducing SVG tags.
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            circle(radius: 40)
+              .attr("fill", "yellow")
+              .attr("stroke-width","4")
+              .attr("stroke","green")
+              .attr("cy","50")
+              .attr("cx","50")
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <circle cx="50" cy="50" stroke="green" stroke-width="4" fill="yellow" r="40"/>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGRectangle() {
+    //Todo: Fix it after introducing SVG tags.
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            rectangle(width: 300, height: 100)
+              .style(
+                [
+                  StyleAttribute(key: "fill", value: "rgb(0,0,255)"),
+                  StyleAttribute(key: "stroke-width", value:"3"),
+                  StyleAttribute(key: "stroke", value: "rgb(0,0,0)")
+                ])
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <rect style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" width="300" height="100"/>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGEllipse() {
+    //Todo: Fix it after introducing SVG tags.
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            ellipse(horizontalRadius: 100, verticalRadius: 50)
+              .style(
+                [
+                  StyleAttribute(key: "fill", value: "yellow"),
+                  StyleAttribute(key: "stroke", value: "purple"),
+                  StyleAttribute(key: "stroke-width", value:"2")
+                ])
+              .position(centerX: 200, centerY: 80)
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <ellipse cx="200" cy="80" style="fill:yellow;stroke:purple;stroke-width:2" rx="100" ry="50"/>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGLine() {
+    //Todo: Fix it after introducing SVG tags.
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            line(startX: 0, startY: 0, endX: 200, endY: 200)
+              .style(
+                [
+                  StyleAttribute(key: "stroke", value: "rgb(255,0,0)"),
+                  StyleAttribute(key: "stroke-width", value:"2")
+                ])
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <line style="stroke:rgb(255,0,0);stroke-width:2" x1="0" y1="0" x2="200" y2="200"/>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGPolygon() {
+    //Todo: Fix it after introducing SVG tags.
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            polygon(points:
+              [
+                (x: 200, y: 10),
+                (x: 250, y: 190),
+                (x: 160, y: 210)
+              ])
+              .style(
+                [
+                  StyleAttribute(key: "fill", value: "lime"),
+                  StyleAttribute(key: "stroke", value: "purple"),
+                  StyleAttribute(key: "stroke-width", value:"1")
+                ])
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <polygon style="fill:lime;stroke:purple;stroke-width:1" points="200,10 250,190 160,210"/>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGPolyline() {
+    //Todo: Fix it after introducing SVG tags.
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            polyline(points:
+              [
+                (x: 20, y: 20),
+                (x: 40, y: 25),
+                (x: 60, y: 40),
+                (x: 80, y: 120),
+                (x: 120, y: 140),
+                (x: 200, y: 180)
+              ])
+              .style(
+                [
+                  StyleAttribute(key: "fill", value: "none"),
+                  StyleAttribute(key: "stroke", value: "black"),
+                  StyleAttribute(key: "stroke-width", value:"3")
+                ])
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <polyline style="fill:none;stroke:black;stroke-width:3" points="20,20 40,25 60,40 80,120 120,140 200,180"/>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGPath() {
+    //Todo: Fix it after introducing SVG tags.
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            path(points: [
+              .moveto(150, 0, true),
+              .lineto(75, 200, true),
+              .lineto(225, 200, true),
+              .closePath
+              ])
+            path(points: [
+              .moveto(175, 200, true),
+              .lineto(150, 0, false),
+              ])
+              .attr("fill", "none")
+              .attr("stroke-width", "3")
+              .attr("stroke", "green")
+            path(points: [
+              .moveto(100, 350, true),
+              .quadraticBézierCurve(150, -300, 300, false),
+              .stop
+              ])
+              .attr("stroke", "blue")
+              .attr("fill", "none")
+              .attr("stroke-width", "5")
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <path d="M150 0 L75 200 L225 200 Z"/>
+            <path stroke="green" stroke-width="3" fill="none" d="M175 200 l150 0"/>
+            <path stroke-width="5" fill="none" stroke="blue" d="M100 350 q150 -300 300 0"/>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGText() {
+    //Todo: Fix it after introducing SVG tags.
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            text("I love SVG!")
+              .attr("fill", "red")
+              .attr("y", "15")
+              .attr("x", "0")
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <text x="0" y="15" fill="red">
+              I love SVG!
+            </text>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
 
   public static func renderForTesting(with vaux: Vaux, html: HTML) throws -> String {
     do {
@@ -963,6 +1323,7 @@ final class VauxTests: XCTestCase {
     ("testAttributes", testAttributes),
     ("testSpan", testSpan),
     ("testScriptCode", testScriptCode),
-    ("testScriptFile", testScriptFile)
+    ("testScriptFile", testScriptFile),
+    ("testSVGCustom", testSVGCustom),
   ]
 }
