@@ -236,6 +236,20 @@ public func define(@HTMLBuilder child: () -> HTML) -> HTML {
     return HTMLNode(tag: "dt", child: child())
 }
 
+
+/// Inserts a `<dfns>` elements into the SVG, and closes with </dfns>` after the filters.
+/// - Parameter filters: The `SVG` filters to define.
+public func definitions(filters: [SVGFilter]) -> SVG {
+    return SVGNode(tag: "defs", child: MultiSVGNode(children: filters))
+}
+
+/// Inserts a `<dfns>` elements into the SVG, and closes with </dfns>` after the gradient.
+/// - Parameter gradient: The gradient to define.
+/// - Note: Currently only one gradient per definition is supported. Having multiple definition in the same SVG element is valid.
+public func definitions(gradient: SVGGradient) -> SVG {
+    return SVGNode(tag: "defs", child: gradient)
+}
+
 /// Inserts a `<dfn>` element into the HTML document, and closes with `</dfn>` after the contents of the closure.
 /// - Parameter child: The `HTML` content to go inside `<dfn></dfn>` element.
 public func defining(@HTMLBuilder child: () -> HTML) -> HTML {
@@ -371,6 +385,14 @@ public func forEach<Coll: Collection>(_ data: Coll, @HTMLBuilder content: @escap
 /// - Tag: form
 public func form(@HTMLBuilder child: () -> HTML) -> HTML {
     return HTMLNode(tag: "form", child: child())
+}
+
+// MARK: - G
+
+/// Inserts a `<g>` elements into the SVG, and closes with </g>` after the contents of the closure.
+/// - Parameter child: The `SVG` content to go inside the `<g></g>` element.
+public func group(@SVGBuilder child: () -> SVG) -> SVG {
+    return SVGNode(tag: "g", child: child())
 }
 
 // MARK: - H
@@ -902,6 +924,8 @@ public func template(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "template", child: child())
 }
 
+/// Inserts a `<text>` element into the SVG element., and closes with `</text>` after the contents of the closure.
+/// - Parameter value: The text to draw using SVG inside `<text></text>,.
 public func text(_ value: String) -> SVG {
     return SVGNode(tag: "text", child: value)
 }

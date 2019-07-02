@@ -3126,7 +3126,6 @@ final class VauxTests: XCTestCase {
   }
   
   func testSVGCustom() {
-    //Todo: Fix it after introducing SVG tags.
     func buildPage() -> HTML {
       html {
         body {
@@ -3163,7 +3162,6 @@ final class VauxTests: XCTestCase {
   }
   
   func testSVGCircle() {
-    //Todo: Fix it after introducing SVG tags.
     func buildPage() -> HTML {
       html {
         body {
@@ -3199,7 +3197,6 @@ final class VauxTests: XCTestCase {
   }
   
   func testSVGRectangle() {
-    //Todo: Fix it after introducing SVG tags.
     func buildPage() -> HTML {
       html {
         body {
@@ -3236,7 +3233,6 @@ final class VauxTests: XCTestCase {
   }
   
   func testSVGEllipse() {
-    //Todo: Fix it after introducing SVG tags.
     func buildPage() -> HTML {
       html {
         body {
@@ -3274,7 +3270,6 @@ final class VauxTests: XCTestCase {
   }
   
   func testSVGLine() {
-    //Todo: Fix it after introducing SVG tags.
     func buildPage() -> HTML {
       html {
         body {
@@ -3310,7 +3305,6 @@ final class VauxTests: XCTestCase {
   }
   
   func testSVGPolygon() {
-    //Todo: Fix it after introducing SVG tags.
     func buildPage() -> HTML {
       html {
         body {
@@ -3352,7 +3346,6 @@ final class VauxTests: XCTestCase {
   }
   
   func testSVGPolyline() {
-    //Todo: Fix it after introducing SVG tags.
     func buildPage() -> HTML {
       html {
         body {
@@ -3397,7 +3390,6 @@ final class VauxTests: XCTestCase {
   }
   
   func testSVGPath() {
-    //Todo: Fix it after introducing SVG tags.
     func buildPage() -> HTML {
       html {
         body {
@@ -3450,7 +3442,6 @@ final class VauxTests: XCTestCase {
   }
   
   func testSVGText() {
-    //Todo: Fix it after introducing SVG tags.
     func buildPage() -> HTML {
       html {
         body {
@@ -3471,6 +3462,410 @@ final class VauxTests: XCTestCase {
             <text x="0" y="15" fill="red">
               I love SVG!
             </text>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGGroup() {
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            group {
+              path(points: [
+                .moveto(5, 20, true),
+                .lineto(215, 0, false)
+              ]).attr("stroke", "red")
+              path(points: [
+                .moveto(5, 40, true),
+                .lineto(215, 0, false)
+                ]).attr("stroke", "black")
+              path(points: [
+                .moveto(5, 60, true),
+                .lineto(215, 0, false)
+                ]).attr("stroke", "blue")
+              }.attr("fill", "none")
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <g fill="none">
+              <path stroke="red" d="M5 20 l215 0"/>
+              <path stroke="black" d="M5 40 l215 0"/>
+              <path stroke="blue" d="M5 60 l215 0"/>
+            </g>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGFilters() {
+    let filters: [SVGFilter] = [
+      SVGFilter(
+        id: "f1",
+        types: [
+          .gaussianBlur([
+            Attribute(key: "stdDeviation", value: "15"),
+            Attribute(key: "in", value: "SourceGraphic"),
+            ])
+        ],
+        attributes: [
+          Attribute(key: "x", value: "0"),
+          Attribute(key: "y", value: "0"),
+        ]
+      )
+    ]
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            definitions(filters: filters)
+            rectangle(width: 90, height: 90)
+              .attr("filter", "url(#f1)")
+              .attr("fill", "yellow")
+              .attr("stroke-width", "3")
+              .attr("stroke", "green")
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <defs>
+              <filter id="f1" x="0" y="0">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="15"/>
+              </filter>
+            </defs>
+            <rect stroke="green" stroke-width="3" fill="yellow" filter="url(#f1)" width="90" height="90"/>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGMultipleFilters() {
+    let filters: [SVGFilter] = [
+      SVGFilter(
+        id: "f1",
+        types: [
+          .offset([
+            Attribute(key: "dy", value: "20"),
+            Attribute(key: "dx", value: "20"),
+            Attribute(key: "in", value: "SourceGraphic"),
+            Attribute(key: "result", value: "offOut"),
+            ]),
+          .blend([
+            Attribute(key: "mode", value: "normal"),
+            Attribute(key: "in2", value: "offOut"),
+            Attribute(key: "in", value: "SourceGraphic"),
+            ])
+        ],
+        attributes: [
+          Attribute(key: "x", value: "0"),
+          Attribute(key: "y", value: "0"),
+          Attribute(key: "width", value: "200%"),
+          Attribute(key: "height", value: "200%"),
+        ]
+      )
+    ]
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            definitions(filters: filters)
+            rectangle(width: 90, height: 90)
+              .attr("filter", "url(#f1)")
+              .attr("fill", "yellow")
+              .attr("stroke-width", "3")
+              .attr("stroke", "green")
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <defs>
+              <filter id="f1" x="0" y="0" width="200%" height="200%">
+                <feOffset result="offOut" in="SourceGraphic" dx="20" dy="20"/>
+                <feBlend in="SourceGraphic" in2="offOut" mode="normal"/>
+              </filter>
+            </defs>
+            <rect stroke="green" stroke-width="3" fill="yellow" filter="url(#f1)" width="90" height="90"/>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGLinearGradient() {
+    let linear = SVGGradient(id: "grad1",
+                               controls: (x1: "0%", y1: "0%", x2: "100%", y2: "0%"),
+                               offsets: [
+                                (offset: "0%",
+                                 style: [
+                                  StyleAttribute(key: "stop-color", value: "rgb(255,255,0)"),
+                                  StyleAttribute(key: "stop-opacity", value: "1")
+                                  ]
+                                ),
+                                (offset: "100%",
+                                 style: [
+                                  StyleAttribute(key: "stop-color", value: "rgb(255,0,0)"),
+                                  StyleAttribute(key: "stop-opacity", value: "1")
+                                  ]
+                                )
+                              ]
+                            )
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            definitions(gradient: linear)
+            ellipse(horizontalRadius: 85, verticalRadius: 55)
+              .position(centerX: 200, centerY: 70)
+              .attr("fill", "url(#grad1)")
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <defs>
+              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop style="stop-color:rgb(255,255,0);stop-opacity:1" offset="0%"/>
+                <stop style="stop-color:rgb(255,0,0);stop-opacity:1" offset="100%"/>
+              </linearGradient>
+            </defs>
+            <ellipse fill="url(#grad1)" cx="200" cy="70" rx="85" ry="55"/>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGRadialGradient() {
+    let linear = SVGGradient(id: "grad1",
+                             controls: (cx: "50%", cy: "50%", r: "50%", fx: "50%", fy: "50%"),
+                             offsets: [
+                              (offset: "0%",
+                               style: [
+                                StyleAttribute(key: "stop-color", value: "rgb(255,255,255)"),
+                                StyleAttribute(key: "stop-opacity", value: "0")
+                                ]
+                              ),
+                              (offset: "100%",
+                               style: [
+                                StyleAttribute(key: "stop-color", value: "rgb(0,0,255)"),
+                                StyleAttribute(key: "stop-opacity", value: "1")
+                                ]
+                              )
+      ]
+    )
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            definitions(gradient: linear)
+            ellipse(horizontalRadius: 85, verticalRadius: 55)
+              .position(centerX: 200, centerY: 70)
+              .attr("fill", "url(#grad1)")
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <defs>
+              <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                <stop style="stop-color:rgb(255,255,255);stop-opacity:0" offset="0%"/>
+                <stop style="stop-color:rgb(0,0,255);stop-opacity:1" offset="100%"/>
+              </radialGradient>
+            </defs>
+            <ellipse fill="url(#grad1)" cx="200" cy="70" rx="85" ry="55"/>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGLinearGradientManual() {
+    let linear = SVGGradient(id: "grad1",
+                             type: .linear,
+                             offsets: [
+                              (offset: "0%",
+                               style: [
+                                StyleAttribute(key: "stop-color", value: "rgb(255,255,0)"),
+                                StyleAttribute(key: "stop-opacity", value: "1")
+                                ]
+                              ),
+                              (offset: "100%",
+                               style: [
+                                StyleAttribute(key: "stop-color", value: "rgb(255,0,0)"),
+                                StyleAttribute(key: "stop-opacity", value: "1")
+                                ]
+                              )
+      ],
+                             attributes: [
+                              Attribute(key: "x1", value: "0%"),
+                              Attribute(key: "y1", value: "0%"),
+                              Attribute(key: "x2", value: "100%"),
+                              Attribute(key: "y2", value: "0%")
+      ]
+    )
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            definitions(gradient: linear)
+            ellipse(horizontalRadius: 85, verticalRadius: 55)
+              .position(centerX: 200, centerY: 70)
+              .attr("fill", "url(#grad1)")
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <defs>
+              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop style="stop-color:rgb(255,255,0);stop-opacity:1" offset="0%"/>
+                <stop style="stop-color:rgb(255,0,0);stop-opacity:1" offset="100%"/>
+              </linearGradient>
+            </defs>
+            <ellipse fill="url(#grad1)" cx="200" cy="70" rx="85" ry="55"/>
+          </svg>
+        </body>
+      </html>
+      """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: buildPage())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
+  func testSVGRadialGradientManual() {
+    let linear = SVGGradient(id: "grad1",
+                             type: .radial,
+                             offsets: [
+                              (offset: "0%",
+                               style: [
+                                StyleAttribute(key: "stop-color", value: "rgb(255,255,255)"),
+                                StyleAttribute(key: "stop-opacity", value: "0")
+                                ]
+                              ),
+                              (offset: "100%",
+                               style: [
+                                StyleAttribute(key: "stop-color", value: "rgb(0,0,255)"),
+                                StyleAttribute(key: "stop-opacity", value: "1")
+                                ]
+                              )
+      ],
+                             attributes: [
+                              Attribute(key: "cx", value: "50%"),
+                              Attribute(key: "cy", value: "50%"),
+                              Attribute(key: "r",  value: "50%"),
+                              Attribute(key: "fx", value: "50%"),
+                              Attribute(key: "fy", value: "50%")
+      ]
+    )
+    func buildPage() -> HTML {
+      html {
+        body {
+          svg {
+            definitions(gradient: linear)
+            ellipse(horizontalRadius: 85, verticalRadius: 55)
+              .position(centerX: 200, centerY: 70)
+              .attr("fill", "url(#grad1)")
+            }.attr("height","100").attr("width","100")
+        }
+      }
+    }
+    let correctHTML = """
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <svg width="100" height="100">
+            <defs>
+              <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                <stop style="stop-color:rgb(255,255,255);stop-opacity:0" offset="0%"/>
+                <stop style="stop-color:rgb(0,0,255);stop-opacity:1" offset="100%"/>
+              </radialGradient>
+            </defs>
+            <ellipse fill="url(#grad1)" cx="200" cy="70" rx="85" ry="55"/>
           </svg>
         </body>
       </html>
@@ -3592,5 +3987,11 @@ final class VauxTests: XCTestCase {
     ("testSVGPolyline", testSVGPolyline),
     ("testSVGPath", testSVGPath),
     ("testSVGText", testSVGText),
+    ("testSVGGroup", testSVGGroup),
+    ("testSVGFilters", testSVGFilters),
+    ("testSVGMultipleFilters", testSVGMultipleFilters),
+    ("testSVGLinearGradient", testSVGLinearGradient),
+    ("testSVGRadialGradient", testSVGRadialGradient),
+    ("testSVGLinearGradientManual", testSVGLinearGradientManual),
   ]
 }

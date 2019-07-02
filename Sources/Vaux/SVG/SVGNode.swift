@@ -110,6 +110,104 @@ struct HTMLSVGNode: HTML {
     func getTag() -> String? {
         return node.getTag()
     }
+}
+
+/// Wraps multiples SVG filters into a `<filter></filter>` element.
+public struct SVGFilter: SVG {
+    let node: SVGNode
+    let attributes: [Attribute]
     
+    public init(id: String,
+                types: [SVGFilterType],
+                attributes: [Attribute] = []) {
+        node = SVGNode(tag: "filter", child: MultiSVGNode(children: types.compactMap{ $0.node }))
+        self.attributes = [Attribute(key: "id", value: id)] + attributes
+    }
     
+    public func renderAsHTML(into stream: HTMLOutputStream, attributes: [Attribute]) {
+        node.renderAsHTML(into: stream, attributes: self.attributes + attributes)
+    }
+
+    public func getTag() -> String? {
+        return node.getTag()
+    }
+}
+
+/// Create a SVG linear or radial gradient.
+public struct SVGGradient: SVG {
+    
+    let node: SVGNode
+    let attributes: [Attribute]
+    
+    public enum GradientType {
+        case linear
+        case radial
+    }
+    
+    /// Create a gradient with full control.
+    /// - Parameters:
+    ///   - id: The identifier of the gradient. Used to be applied to a SVG element.
+    ///   - type: The type of gradient, linear or radial.
+    ///   - offsets: The stops for the colors, 2 are needed to get a valid gradient.
+    ///   - attributes: A list of attributes to apply to the gradient element. Do not set `id` here.
+    public init(id: String,
+                type: GradientType,
+                offsets: [(offset: String, style: [StyleAttribute])],
+                attributes: [Attribute] = []) {
+        let stops = offsets.compactMap {
+            SVGNode(tag: "stop")
+                .attr("offset", $0.offset)
+                .style($0.style)
+        }
+        switch type {
+        case .linear:
+            node = SVGNode(tag: "linearGradient", child: MultiSVGNode(children: stops))
+        case .radial:
+            node = SVGNode(tag: "radialGradient", child: MultiSVGNode(children: stops))
+        }
+        self.attributes = [Attribute(key: "id", value: id)] + attributes
+    }
+    
+    /// Convinent initializer to create a linear gradient.
+    public init(id: String,
+                controls: (x1: String, y1: String, x2: String, y2: String),
+                offsets: [(offset: String, style: [StyleAttribute])]) {
+        let stops = offsets.compactMap {
+            SVGNode(tag: "stop")
+                .attr("offset", $0.offset)
+                .style($0.style)
+        }
+        node = SVGNode(tag: "linearGradient", child: MultiSVGNode(children: stops))
+        attributes = [Attribute(key: "id", value: id),
+                      Attribute(key: "x1", value: controls.x1),
+                      Attribute(key: "y1", value: controls.y1),
+                      Attribute(key: "x2", value: controls.x2),
+                      Attribute(key: "y2", value: controls.y2)]
+    }
+    
+    /// Convinent initializer to create a radial gradient.
+    public init(id: String,
+                controls: (cx: String, cy: String, r: String, fx: String, fy: String),
+                offsets: [(offset: String, style: [StyleAttribute])]) {
+        let stops = offsets.compactMap {
+            SVGNode(tag: "stop")
+                .attr("offset", $0.offset)
+                .style($0.style)
+        }
+        node = SVGNode(tag: "radialGradient", child: MultiSVGNode(children: stops))
+        attributes = [Attribute(key: "id", value: id),
+                      Attribute(key: "cx", value: controls.cx),
+                      Attribute(key: "cy", value: controls.cy),
+                      Attribute(key: "r", value: controls.r),
+                      Attribute(key: "fx", value: controls.fx),
+                      Attribute(key: "fy", value: controls.fy)]
+    }
+    
+    public func renderAsHTML(into stream: HTMLOutputStream, attributes: [Attribute]) {
+        node.renderAsHTML(into: stream, attributes: self.attributes + attributes)
+    }
+    
+    public func getTag() -> String? {
+        return node.getTag()
+    }
 }

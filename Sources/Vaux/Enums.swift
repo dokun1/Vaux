@@ -227,6 +227,7 @@ public enum MIME: String {
 }
 
 /// Create control for SVG path element.
+/// TODO: Check and fully support commands (they are too restrictive so far).
 public enum SVGPathControl {
     case moveto(Double, Double, Bool)
     case lineto(Double, Double, Bool)
@@ -255,9 +256,9 @@ public enum SVGPathControl {
         case let .smoothCurveto(x, y, absolute):
             return "S".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))"
         case let .quadraticBézierCurve(x, y, z, absolute):
-            return "Q".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))\(z == nil ? "" : " \(String(format: "%g", z!))")"
+            return "Q".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))\(z == nil ? "" : String(format: " %g", z!))"
         case let .smoothQuadraticBézierCurveto(x, y, z, absolute):
-            return "T".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))\(z == nil ? "" : " \(String(format: "%g", z!))")"
+            return "T".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))\(z == nil ? "" : String(format: " %g", z!))"
         case let .ellipticalArc(x, y, absolute):
             return "A".case(absolute) + "\(String(format: "%g", x)) \(String(format: "%g", y))"
         case .closePath:
@@ -271,5 +272,108 @@ public enum SVGPathControl {
 fileprivate extension String {
     func `case`(_ absolute: Bool) -> String {
         return absolute ? self.uppercased() : self.lowercased()
+    }
+}
+
+public enum SVGFilterType {
+    case blend([Attribute])
+    case colorMatrix([Attribute])
+    case componentTransfer([Attribute])
+    case composite([Attribute])
+    case convolveMatrix([Attribute])
+    case diffuseLighting([Attribute])
+    case displacementMap([Attribute])
+    case distantLight([Attribute])
+    case flood([Attribute])
+    case gaussianBlur([Attribute])
+    case image([Attribute])
+    case merge([Attribute])
+    case morphology([Attribute])
+    case offset([Attribute])
+    case pointLight([Attribute])
+    case specularLighting([Attribute])
+    case spotLight([Attribute])
+    case tile([Attribute])
+    case turbulence([Attribute])
+    
+    var node: SVG {
+        switch self {
+        case let .blend(attributes):
+            return attributes.reduce(SVGNode(tag: "feBlend")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .colorMatrix(attributes):
+            return attributes.reduce(SVGNode(tag: "feColorMatrix")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .componentTransfer(attributes):
+            return attributes.reduce(SVGNode(tag: "feComponentTransfer")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .composite(attributes):
+            return attributes.reduce(SVGNode(tag: "feComposite")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .convolveMatrix(attributes):
+            return attributes.reduce(SVGNode(tag: "feConvolveMatrix")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .diffuseLighting(attributes):
+            return attributes.reduce(SVGNode(tag: "feDiffuseLighting")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .displacementMap(attributes):
+            return attributes.reduce(SVGNode(tag: "feDisplacementMap")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .distantLight(attributes):
+            return attributes.reduce(SVGNode(tag: "feDistantLight")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .flood(attributes):
+            return attributes.reduce(SVGNode(tag: "feFlood")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .gaussianBlur(attributes):
+            return attributes.reduce(SVGNode(tag: "feGaussianBlur")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .image(attributes):
+            return attributes.reduce(SVGNode(tag: "feImage")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .merge(attributes):
+            return attributes.reduce(SVGNode(tag: "feMerge")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .morphology(attributes):
+            return attributes.reduce(SVGNode(tag: "feMorphology")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .offset(attributes):
+            return attributes.reduce(SVGNode(tag: "feOffset")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .pointLight(attributes):
+            return attributes.reduce(SVGNode(tag: "fePointLight")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .specularLighting(attributes):
+            return attributes.reduce(SVGNode(tag: "feSpecularLighting")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .spotLight(attributes):
+            return attributes.reduce(SVGNode(tag: "feSpotLight")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .tile(attributes):
+            return attributes.reduce(SVGNode(tag: "feTile")) {
+                $0.attr($1.key, $1.value)
+            }
+        case let .turbulence(attributes):
+            return attributes.reduce(SVGNode(tag: "feTurbulence")) {
+                $0.attr($1.key, $1.value)
+            }
+        }
     }
 }
