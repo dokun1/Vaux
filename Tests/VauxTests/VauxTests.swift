@@ -259,7 +259,7 @@ final class VauxTests: XCTestCase {
       <body>
         <p>
           When I was
-          <span style="color:blue">
+          <span style="color:blue;">
             a young boy,
           </span>
           my father took me into the city.
@@ -790,7 +790,7 @@ final class VauxTests: XCTestCase {
     let correctHTML = """
     <!DOCTYPE html>
     <html>
-      <body style="background-color:blue;color:red">
+      <body style="background-color:blue;color:red;">
         <h1>
           This is a heading of weight 1
         </h1>
@@ -1311,8 +1311,8 @@ final class VauxTests: XCTestCase {
         <body>
           <table>
             <colgroup>
-              <col span="2" style="background-color:red"/>
-              <col style="background-color:yellow"/>
+              <col span="2" style="background-color:red;"/>
+              <col style="background-color:yellow;"/>
             </colgroup>
             <tr>
               <th>
@@ -3125,6 +3125,45 @@ final class VauxTests: XCTestCase {
     }
   }
   
+  func testStyles() {
+    func pageWithHeading() -> HTML {
+      html {
+        body {
+          heading(.h1) {
+            "This is a heading"
+          }.style([StyleAttribute(key: "color", value: "blue"),
+                   StyleAttribute(key: "font-family", value: "verdana")])
+          paragraph {
+            "This is a paragraph."
+          }.style([StyleAttribute(key: "font-family", value: "courier"),
+                   StyleAttribute(key: "font-size", value: "160%"),
+                   StyleAttribute(key: "color", value: "blue")])
+          }.style([StyleAttribute(key: "background-color", value: "powderblue")])
+      }
+    }
+    let correctHTML = """
+    <!DOCTYPE html>
+    <html>
+      <body style="background-color:powderblue;">
+        <h1 style="color:blue;font-family:verdana;">
+          This is a heading
+        </h1>
+        <p style="font-family:courier;font-size:160%;color:blue;">
+          This is a paragraph.
+        </p>
+      </body>
+    </html>
+    """.replacingOccurrences(of: "\n", with: "")
+    let vaux = Vaux()
+    vaux.outputLocation = .file(filepath: Filepath(name: "testing", path: "/tmp/"))
+    do {
+      let rendered = try VauxTests.renderForTesting(with: vaux, html: pageWithHeading())
+      XCTAssertEqual(rendered, correctHTML)
+    } catch let error {
+      XCTFail(error.localizedDescription)
+    }
+  }
+  
   func testSVGCustom() {
     func buildPage() -> HTML {
       html {
@@ -3978,6 +4017,7 @@ final class VauxTests: XCTestCase {
     ("testUnderline", testUnderline),
     ("testVariable", testVariable),
     ("testWordBreak", testWordBreak),
+    ("testStyles", testStyles),
     ("testSVGCustom", testSVGCustom),
     ("testSVGCircle", testSVGCircle),
     ("testSVGRectangle", testSVGRectangle),
