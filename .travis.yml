@@ -7,7 +7,7 @@ matrix:
     - os: linux
       dist: bionic
       sudo: required
-     - os: osx
+    - os: osx
       osx_image: xcode11
       sudo: required
 
