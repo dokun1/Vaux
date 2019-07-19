@@ -1,7 +1,6 @@
 env:
   global:
     - CODECOV_ELIGIBLE=true
-    - SONARCLOUD_ELIGIBLE=true
 
 matrix:
   include:
