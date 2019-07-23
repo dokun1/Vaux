@@ -16,7 +16,7 @@ extension HTML {
   public func alignment(_ value: Alignment) -> HTML {
     return attr("align", value.rawValue)
   }
-
+  
   /// Allows you to specify any attribute at the end of a HTML element. For example, if you specify `div { "some text" }.attr("tag", "123")`, then the rendered HTML will be `<div tag="123">some text</div>`.
   /// - Parameters:
   ///   - key: The tag for the attribute that will be added to this HTML node
@@ -26,7 +26,7 @@ extension HTML {
     return AttributedNode(attribute: Attribute(key: key, value: value),
                           child: self)
   }
-
+  
   /// Allows you to specify a `bgcolor` attribute at the end of a HTML element. For example, if you specify `div { "some text" }.backgroundColor("555555")`, then the rendered HTML will be `<div bgcolor="555555">some text</div>`.
   /// - Note: Background color is generally better to set in your associated CSS file. The hex code must be a 6 character hexadecimal string.
   /// - Warning: This will eventually be refactored to allow for use of specific colors that convert to hex codes via an enum. UIColor() must not be used, which would limit this library to iOS only.
@@ -129,5 +129,51 @@ extension HTML {
 
   public func type(_ mime: MIME) -> HTML {
     return attr("type", mime.rawValue)
+  }
+}
+
+extension SVG {
+  
+  /// Allows you to specify any attribute at the end of a SVG element. For example, if you specify `circle().attr("tag", "123")`, then the rendered HTML will be `<circle tag="123"/>`.
+  /// - Parameters:
+  ///   - key: The tag for the attribute that will be added to this SVG node
+  ///   - value: The value that will be associated with the tag.
+  public func attr(_ key: String, _ value: String? = nil) -> SVG {
+    return AttributedSVGNode(attribute: Attribute(key: key, value: value),
+                             child: self)
+  }
+  
+  /// Allows you to specify inline CSS (cascading style sheets) style for a SVG element.
+  /// - Note: Inline CSS style on SVG elements is often times frowned upon. It is recommended to instead use a link to a separate stylesheet that is defined on its own. You can do this with the `linkStylesheet()` builder.
+  /// - Example: This:
+  /// ```
+  /// circle(radius: 40)
+  ///   .style([StyleAttribute(key: "fill", value: "rgb(0,0,255)"])
+  /// ```
+  /// yields this:
+  /// ```
+  /// <circle style="fill:rgb(0,0,255)" r="40"/>
+  /// ```
+  /// - Parameters:
+  ///   - attributes: An array of structs typed `StyleAttribute` that contain a key and value for inline styling.
+  public func style(_ attributes: [StyleAttribute]) -> SVG {
+    var inlineStyle = String()
+    for (index, attribute) in attributes.enumerated() {
+      inlineStyle.write(attribute.key)
+      inlineStyle.write(":")
+      inlineStyle.write(attribute.value)
+      if attributes.count > 1, index != attributes.count - 1 {
+        inlineStyle.write(";")
+      }
+    }
+    return attr("style", inlineStyle)
+  }
+  
+  public func position(left x: Double, top y: Double) -> SVG {
+    return self.attr("y", "\(String(format: "%g", y))").attr("x", "\(String(format: "%g", x))")
+  }
+  
+  public func position(centerX cx: Double, centerY cy: Double) -> SVG {
+    return self.attr("cy", "\(String(format: "%g", cy))").attr("cx", "\(String(format: "%g", cx))")
   }
 }

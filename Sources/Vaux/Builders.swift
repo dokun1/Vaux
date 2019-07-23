@@ -158,6 +158,13 @@ public func caption(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "caption", child: child())
 }
 
+/// Inserts a `<circle/>` element into the SVG element.
+/// - Parameters:
+///   - radius: radius of the circle.
+public func circle(radius: UInt) -> SVG {
+    return SVGNode(tag: "circle").attr("r", "\(radius)")
+}
+
 /// Inserts a `<cite>` element into the HTML document, and closes with `</cite>` after the contents of the closure.
 /// - Parameters:
 ///   - child: `HTML` content to go inside the `<cite></cite>` element.
@@ -185,7 +192,7 @@ public func columnGroup(styles: [TableColumnStyle]) -> HTML {
 ///   - tag: The tag for the element, which can be any `String`.
 ///   - child: `HTML` content to go inside the HTML element.
 public func custom(tag: String, @HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: tag, child: child())
+    return HTMLNode(tag: tag, child: child())
 }
 
 /// Inserts a custom self-closing element into the HTML document with your specified tag. For example, if you specify `"any-tag"` for the tag, then the HTML element will look like: `<any-tag/>`
@@ -193,7 +200,15 @@ public func custom(tag: String, @HTMLBuilder child: () -> HTML) -> HTML {
 ///   - tag: The tag for the element, which can be any `String`.
 ///   - child: `HTML` content to go inside the HTML element.
 public func custom(tag: String) -> HTML {
-  return HTMLNode(tag: tag, child: nil)
+    return HTMLNode(tag: tag, child: nil)
+}
+
+/// Inserts a custom self-closing element into the SVG document with your specified tag. For example, if you specify `"any-tag"` for the tag, then the SVG element will look like: `<any-tag/>`
+/// - Parameters:
+///   - tag: The tag for the element, which can be any `String`.
+///   - child: `SVG` content to go inside the SVG element.
+public func customSVG(tag: String) -> SVG {
+    return SVGNode(tag: tag)
 }
 
 // MARK: - D
@@ -219,6 +234,20 @@ public func data(list: [String], id: String) -> HTML {
 /// - Tag: define
 public func define(@HTMLBuilder child: () -> HTML) -> HTML {
     return HTMLNode(tag: "dt", child: child())
+}
+
+
+/// Inserts a `<dfns>` elements into the SVG, and closes with </dfns>` after the filters.
+/// - Parameter filters: The `SVG` filters to define.
+public func definitions(filters: [SVGFilter]) -> SVG {
+    return SVGNode(tag: "defs", child: MultiSVGNode(children: filters))
+}
+
+/// Inserts a `<dfns>` elements into the SVG, and closes with </dfns>` after the gradient.
+/// - Parameter gradient: The gradient to define.
+/// - Note: Currently only one gradient per definition is supported. Having multiple definition in the same SVG element is valid.
+public func definitions(gradient: SVGGradient) -> SVG {
+    return SVGNode(tag: "defs", child: gradient)
 }
 
 /// Inserts a `<dfn>` element into the HTML document, and closes with `</dfn>` after the contents of the closure.
@@ -290,6 +319,13 @@ public func div(@HTMLBuilder child: () -> HTML) -> HTML {
 
 // MARK: - E
 
+/// Inserts a `<ellipse/>` element into the SVG document.
+/// - Parameter horizontalRadius: The horizontal radius of the ellipse.
+/// - Parameter verticalRadius: The vertical radius of the ellipse.
+public func ellipse(horizontalRadius: UInt, verticalRadius: UInt) -> SVG {
+    return SVGNode(tag: "ellipse").attr("ry", "\(verticalRadius)").attr("rx", "\(horizontalRadius)")
+}
+
 /// Inserts a `<embed/>` elements into the HTML document.
 /// - Parameter url: The link to the external file embed.
 public func embed(url: String) -> HTML {
@@ -349,6 +385,14 @@ public func forEach<Coll: Collection>(_ data: Coll, @HTMLBuilder content: @escap
 /// - Tag: form
 public func form(@HTMLBuilder child: () -> HTML) -> HTML {
     return HTMLNode(tag: "form", child: child())
+}
+
+// MARK: - G
+
+/// Inserts a `<g>` elements into the SVG, and closes with </g>` after the contents of the closure.
+/// - Parameter child: The `SVG` content to go inside the `<g></g>` element.
+public func group(@SVGBuilder child: () -> SVG) -> SVG {
+    return SVGNode(tag: "g", child: child())
 }
 
 // MARK: - H
@@ -448,6 +492,14 @@ public func label(for elementID: String, @HTMLBuilder child: () -> HTML) -> HTML
 /// - Tag: legend
 public func legend(@HTMLBuilder child: () -> HTML) -> HTML {
     HTMLNode(tag: "legend", child: child())
+}
+
+public func line(startX x1: Double, startY y1: Double, endX x2: Double, endY y2: Double) -> SVG {
+    return SVGNode(tag: "line")
+        .attr("y2", "\(String(format: "%g", y2))")
+        .attr("x2", "\(String(format: "%g", x2))")
+        .attr("y1", "\(String(format: "%g", y1))")
+        .attr("x1", "\(String(format: "%g", x1))")
 }
 
 /// Inserts a `<br/>` element into the HTML document.
@@ -612,20 +664,27 @@ public func output(@HTMLBuilder child: () -> HTML) -> HTML {
 
 // MARK: - P
 
-/// Inserts a `<p>` element into the HTML document, and closes with `</p>` after the contents of the closure.
-/// - Parameters:
-///   - child: `HTML` content to go inside the `<p></p>` element.
-public func paragraph(@HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: "p", child: child())
-}
-
 /// Inserts a `<param>` element into the HTML document, and closes with `</param>` after the contents of the closure.
 /// - Parameters:
 ///   - child: `HTML` content to go inside the `<param></param>` element.
 /// - Note: Used only inside [object](x-source-tag://object) element.
 /// - Tag: parameter
 public func parameter(name: String, value: String? = nil) -> HTML {
-  return HTMLNode(tag: "param", child: nil).attr("value", value).attr("name", name)
+    return HTMLNode(tag: "param", child: nil).attr("value", value).attr("name", name)
+}
+
+/// Inserts a `<p>` element into the HTML document, and closes with `</p>` after the contents of the closure.
+/// - Parameters:
+///   - child: `HTML` content to go inside the `<p></p>` element.
+public func paragraph(@HTMLBuilder child: () -> HTML) -> HTML {
+    return HTMLNode(tag: "p", child: child())
+}
+
+/// Inserts a `<path/>` element into the SVG element.
+/// - Parameter points: The list of path's corners.
+public func path(points: [SVGPathControl]) -> SVG {
+    return SVGNode(tag: "path").attr("d",
+                                     "\(points.compactMap{ "\($0.toString)" }.joined(separator: " "))")
 }
 
 /// Inserts a `<picture>` element into the HTML document, and closes with `</picture>` after the contents of the closure.
@@ -634,21 +693,45 @@ public func parameter(name: String, value: String? = nil) -> HTML {
 /// - Note: Used only [source](x-source-tag://source) elements and one mandatory [image](x-source-tag://image) as the last one.
 /// - Tag: picture
 public func picture(@HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: "picture", child: child())
+    return HTMLNode(tag: "picture", child: child())
+}
+
+/// Inserts a `<polygon/>` element into the SVG element.
+/// - Parameter points: The list of polygon's corners.
+public func polygon(points: [(x: Double, y: Double)]) -> SVG {
+    return SVGNode(tag: "polygon").attr("points",
+                                        "\(points.compactMap{ "\(String(format: "%g", $0.x)),\(String(format: "%g", $0.y))" }.joined(separator: " "))")
+}
+
+/// Inserts a `<polyline/>` element into the SVG element.
+/// - Parameter points: The list of line's points.
+public func polyline(points: [(x: Double, y: Double)]) -> SVG {
+    return SVGNode(tag: "polyline").attr("points",
+                                         "\(points.compactMap{ "\(String(format: "%g", $0.x)),\(String(format: "%g", $0.y))" }.joined(separator: " "))")
 }
 
 /// Inserts a `<pre>` element into the HTML document, and closes with `</pre>` after the contents of the closure.
 /// - Parameters:
 ///   - child: `HTML` content to go inside the `<pre></pre>` element.
 public func preformatted(@HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: "pre", child: child())
+    return HTMLNode(tag: "pre", child: child())
 }
 
 /// Inserts a `<progress>` element into the HTML document, and closes with `</progress>` after the contents of the closure.
 /// - Parameters:
 ///   - child: `HTML` content to go inside the `<progress></progress>` element.
 public func progress(@HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: "progress", child: child())
+    return HTMLNode(tag: "progress", child: child())
+}
+
+// MARK: - R
+
+/// Inserts a `<rect/>` element into the SVG element.
+/// - Parameters:
+///   - width: width of the rectangle.
+///   - height: heigth of the rectangle.
+public func rectangle(width: UInt, height: UInt) -> SVG {
+    return SVGNode(tag: "rect").attr("height", "\(height)").attr("width", "\(width)")
 }
 
 /// Inserts a `<ruby>` element into the HTML document, and closes with `</ruby>` after the contents of the closure.
@@ -777,10 +860,10 @@ public func superscript(@HTMLBuilder child: () -> HTML) -> HTML {
 }
 
 ///  Inserts a `<svg>` element into the HTML document, and closes with `</svg>` after the contents of the closure. Used to make text look higher than other text.
-/// - Parameter child: `HTML` content to go inside the `<svg></svg>` element.
+/// - Parameter child: `SVG` content to go inside the `<svg></svg>` element.
 /// - Todo: Replace HTML content by SVG related tags and content.
-public func svg(@HTMLBuilder child: () -> HTML) -> HTML {
-  return HTMLNode(tag: "svg", child: child())
+public func svg(@SVGBuilder child: () -> SVG) -> HTML {
+    return HTMLSVGNode(node: SVGNode(tag: "svg", child: child()))
 }
 
 // MARK: - T
@@ -839,6 +922,12 @@ public func tableRow(@HTMLBuilder child: () -> HTML) -> HTML {
 ///   - child: `HTML` content to go inside the `<template></template>` element.
 public func template(@HTMLBuilder child: () -> HTML) -> HTML {
   return HTMLNode(tag: "template", child: child())
+}
+
+/// Inserts a `<text>` element into the SVG element., and closes with `</text>` after the contents of the closure.
+/// - Parameter value: The text to draw using SVG inside `<text></text>,.
+public func text(_ value: String) -> SVG {
+    return SVGNode(tag: "text", child: value)
 }
 
 /// Inserts a `<textarea>` element into the HTML document, and closes with `</textarea>` after the contents of the closure.
