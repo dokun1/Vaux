@@ -14,6 +14,9 @@
   <a href="https://travis-ci.com/mbarnach/Vaux"/>
     <img src="https://travis-ci.com/mbarnach/Vaux.svg?branch=master">
   </a>
+  <a href="https://codecov.io/gh/mbarnach/Vaux">
+    <img src="https://codecov.io/gh/mbarnach/Vaux/branch/master/graph/badge.svg" />
+  </a>
 </p>
 
 Vaux is a library that allows you to generate HTML using Swift. It includes a domain-specific language written in Swift for HTML, and its purpose is to allow developers to write HTML, but in Swift.

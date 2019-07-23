@@ -1,7 +1,14 @@
+env:
+  global:
+    - CODECOV_ELIGIBLE=true
+
 matrix:
   include:
     - os: linux
       dist: bionic
+      sudo: required
+    - os: osx
+      osx_image: xcode11
       sudo: required
 
 before_install:
