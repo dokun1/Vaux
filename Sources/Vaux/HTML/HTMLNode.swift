@@ -70,11 +70,26 @@ struct HTMLNode: HTML {
 public struct Attribute {
   public let key: String
   public let value: String?
+
+  public init(key: String, value: String?) {
+    self.key = key
+    self.value = value
+  }
+
+  public init(key: String) {
+    self.key = key
+    self.value = nil
+  }
 }
 
 public struct StyleAttribute {
   public let key: String
   public let value: String
+
+  public init(key: String, value: String) {
+    self.key = key
+    self.value = value
+  }
 }
 
 /// Wraps an HTML object with a given attribute. these attributes are collected

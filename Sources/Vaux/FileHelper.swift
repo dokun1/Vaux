@@ -10,6 +10,11 @@ import Foundation
 public struct Filepath {
   public var name: String
   public var path: String
+
+  public init(name: String, path: String) {
+    self.path = path
+    self.name = name
+  }
 }
 
 public class VauxFileHelper {
