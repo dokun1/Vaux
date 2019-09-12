@@ -12,7 +12,12 @@ import Foundation
 public struct FigureCaption {
     public let place: FigureCaptionPosition
     public let caption: HTML
-}
+
+    public init(place: FigureCaptionPosition, caption: HTML) {
+      self.place = place
+      self.caption = caption
+    }
+ }
 
 /// This document should be in alphabetical order.
 // MARK: - Builders
