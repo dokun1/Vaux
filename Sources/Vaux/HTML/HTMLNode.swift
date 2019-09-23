@@ -92,6 +92,16 @@ public struct StyleAttribute {
   }
 }
 
+/// Allows to init [StyleAttribute] by [String: String] literal.
+extension Array : ExpressibleByDictionaryLiteral where Element == StyleAttribute {
+    public typealias Key = String
+    public typealias Value = String
+    
+    public init(dictionaryLiteral elements: (String, String)...) {
+        self.init(elements.map { .init(key: $0.0, value: $0.1) } )
+    }
+}
+
 /// Wraps an HTML object with a given attribute. these attributes are collected
 /// while walking the node hierarchy and finally printed when printing an
 /// `HTMLNode`.
