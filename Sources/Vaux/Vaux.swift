@@ -22,9 +22,10 @@ public class Vaux {
         }
     }
   
-  
     /// Initializer must be public to create instance
-    public init() { }
+    public init(output: VauxOutput = .stdout) {
+        self.output = output
+    }
   
     /// Default parameter for where render output goes
     public var outputLocation: VauxOutput = .stdout
@@ -49,7 +50,7 @@ public class Vaux {
         }
     }
   
-    /// Renders `HTML` into a static HTML file.
+    /// Renders `HTML` into a static HTML output.
     /// - Parameters:
     ///   - content: A function that builds `HTML` that you intend to render.
     public func render(_ content: HTML) throws {
@@ -57,6 +58,20 @@ public class Vaux {
             let stream = try getStream(for: content)
             content.renderAsHTML(into: stream, attributes: [])
         } catch let error {
+            throw error
+        }
+    }
+    
+    /// Renders `HTML` into a static HTML string.
+    /// - Parameters:
+    ///   - content: A function that builds `HTML` that you intend to render.
+    /// - Returns: HTML string.
+    public static func render(_ content: () -> HTML) throws -> String {
+        do {
+            var result = ""
+            try Vaux(output: .string(&result)).render(content())
+            return result
+        } catch {
             throw error
         }
     }
