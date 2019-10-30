@@ -14,7 +14,7 @@ import Foundation
 public class Vaux {
     public enum VauxOutput {
         case stdout
-        case file(name: String, path: String)
+        case file(filepath: Filepath)
         case custom(TextOutputStream & AnyObject)
     
         public static func string(_ value: inout String) -> VauxOutput {
@@ -24,7 +24,7 @@ public class Vaux {
   
     /// Initializer must be public to create instance
     public init(output: VauxOutput = .stdout) {
-        self.output = output
+        self.outputLocation = output
     }
   
     /// Default parameter for where render output goes
@@ -37,9 +37,9 @@ public class Vaux {
             return HTMLOutputStream(FileHandle.standardOutput, content.getTag())
         case let .custom(stream):
             return HTMLOutputStream(stream, content.getTag())
-        case .file(let filename, let path):
+        case .file(let filepath):
             do {
-                guard let url = VauxFileHelper.createFile(named: filename, path: path) else {
+                guard let url = VauxFileHelper.createFile(filepath) else {
                     throw VauxFileHelperError.noFile
                 }
                 let handler = try FileHandle(forWritingTo: url)
